@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader/root';
 import io from 'socket.io-client';
-import Beforeunload from 'react-beforeunload';
 import { withStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
 import AppBar from '@material-ui/core/AppBar';
@@ -16,6 +15,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 
 import Start from './Start';
+import Game from './Game';
 
 const theme = createMuiTheme({
   palette: {
@@ -27,20 +27,16 @@ const theme = createMuiTheme({
     useNextVariants: true
   }
 });
-const styles = (theme) => ({
+const styles = {
   root: {
     flexGrow: 1
-  },
-  button: {
-    margin: theme.spacing.unit,
-    marginTop: '35px'
   }
-});
+};
 
 let SOCKET;
 
 function Transition(props) {
-  return <Slide direction="up" {...props} />;
+  return <Slide direction='up' {...props} />;
 }
 
 class App extends Component {
@@ -69,10 +65,11 @@ class App extends Component {
 
     // TODO: Update
     SOCKET = io('http://localhost:3000/');
-    SOCKET.emit('newPlayer', this.state.username);
-
+    
     // When the client connects.
     SOCKET.on('connect', () => {
+      this.setState({ connected: true });
+      SOCKET.emit('newPlayer', this.state.username);
     });
     // If the username already exists in the server.
     SOCKET.on('usernameExists', () => {
@@ -80,10 +77,7 @@ class App extends Component {
     });
     // New game data.
     SOCKET.on('updatedGame', (game) => {
-      this.setState({
-        connected: true,
-        game: game
-      });
+      this.setState({ game: game });
     });
     // If the server stops working.
     SOCKET.on('disconnect', () => {
@@ -91,6 +85,7 @@ class App extends Component {
         connected: false,
         game: {}
       });
+      SOCKET.disconnect();
     });
   }
   disconnect = () => {
@@ -121,30 +116,27 @@ class App extends Component {
 
           {
             this.state.connected
-              ? <>
-                  <Beforeunload onBeforeunload={this.disconnect}/>
-                  <Button variant='outlined' color='primary' className={classes.button} onClick={this.disconnect}>
-                    Disconnect
-                  </Button>
-                </>
+              // FIXME:
+              ? <Game gameState={this.state.game} disconnect={this.disconnect} />
               : <Start username={this.state.username} handleUsernameChange={this.handleUsernameChange} connect={this.connect} />
           }
+
           <Dialog
             open={this.state.usernameExistsDialog}
             TransitionComponent={Transition}
             keepMounted
             onClose={this.handleDialogClose('usernameExistsDialog')}
-            aria-labelledby="alert-dialog-slide-title"
-            aria-describedby="alert-dialog-slide-description"
+            aria-labelledby='alert-dialog-slide-title'
+            aria-describedby='alert-dialog-slide-description'
           >
-            <DialogTitle id="alert-dialog-slide-title">Username Exists in Game</DialogTitle>
+            <DialogTitle id='alert-dialog-slide-title'>Username Exists in Game</DialogTitle>
             <DialogContent>
-              <DialogContentText id="alert-dialog-slide-description">
+              <DialogContentText id='alert-dialog-slide-description'>
                 There is another person inside the game with the same username. Try again with another username or wait.
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={this.handleDialogClose('usernameExistsDialog')} color="primary">
+              <Button onClick={this.handleDialogClose('usernameExistsDialog')} color='primary'>
                 Ok
               </Button>
             </DialogActions>
@@ -154,17 +146,17 @@ class App extends Component {
             TransitionComponent={Transition}
             keepMounted
             onClose={this.handleDialogClose('badUsernameDialog')}
-            aria-labelledby="alert-dialog-slide-title"
-            aria-describedby="alert-dialog-slide-description"
+            aria-labelledby='alert-dialog-slide-title'
+            aria-describedby='alert-dialog-slide-description'
           >
-            <DialogTitle id="alert-dialog-slide-title">Bad Username</DialogTitle>
+            <DialogTitle id='alert-dialog-slide-title'>Bad Username</DialogTitle>
             <DialogContent>
-              <DialogContentText id="alert-dialog-slide-description">
+              <DialogContentText id='alert-dialog-slide-description'>
                 Your username was invalid. Your username must not be blank and has to be at most 16 characters.
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={this.handleDialogClose('badUsernameDialog')} color="primary">
+              <Button onClick={this.handleDialogClose('badUsernameDialog')} color='primary'>
                 Ok
               </Button>
             </DialogActions>
