@@ -48,7 +48,8 @@ class App extends Component {
       connected: false,
       game: {},
       usernameExistsDialog: false,
-      badUsernameDialog: false
+      badUsernameDialog: false,
+      serverDisconnectDialog: false
     };
   }
 
@@ -65,10 +66,14 @@ class App extends Component {
 
     // TODO: Update
     SOCKET = io('http://localhost:3000/');
-    
+    const CONNECT_TIMEOUT = setTimeout(() => {
+      SOCKET.disconnect();
+      this.setState({ serverDisconnectDialog: true });
+    }, 1500);
+
     // When the client connects.
-    SOCKET.on('connect', () => {
-      this.setState({ connected: true });
+    SOCKET.on('connect', async() => {
+      clearTimeout(CONNECT_TIMEOUT);
       SOCKET.emit('newPlayer', this.state.username);
     });
     // If the username already exists in the server.
@@ -78,6 +83,10 @@ class App extends Component {
     // New game data.
     SOCKET.on('updatedGame', (game) => {
       this.setState({ game: game });
+
+      if(!this.state.connected) {
+        this.setState({ connected: true });
+      }
     });
     // If the server stops working.
     SOCKET.on('disconnect', () => {
@@ -86,6 +95,18 @@ class App extends Component {
         game: {}
       });
       SOCKET.disconnect();
+
+      if(!this.state.usernameExistsDialog) {
+        this.setState({ serverDisconnectDialog: true });
+      }
+    });
+  }
+  start = () => {
+    SOCKET.emit('start');
+    this.setState({
+      game: {
+        started: true
+      }
     });
   }
   disconnect = () => {
@@ -102,7 +123,7 @@ class App extends Component {
 
   render() {
     const { classes } = this.props;
-
+    
     return (
       <MuiThemeProvider theme={theme}>
         <div className={classes.root}>
@@ -116,8 +137,7 @@ class App extends Component {
 
           {
             this.state.connected
-              // FIXME:
-              ? <Game gameState={this.state.game} disconnect={this.disconnect} />
+              ? <Game username={this.state.username} gameState={this.state.game} disconnect={this.disconnect} start={this.start} />
               : <Start username={this.state.username} handleUsernameChange={this.handleUsernameChange} connect={this.connect} />
           }
 
@@ -157,6 +177,26 @@ class App extends Component {
             </DialogContent>
             <DialogActions>
               <Button onClick={this.handleDialogClose('badUsernameDialog')} color='primary'>
+                Ok
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog
+            open={this.state.serverDisconnectDialog}
+            TransitionComponent={Transition}
+            keepMounted
+            onClose={this.handleDialogClose('badUsernameDialog')}
+            aria-labelledby='alert-dialog-slide-title'
+            aria-describedby='alert-dialog-slide-description'
+          >
+            <DialogTitle id='alert-dialog-slide-title'>Server Disconnect</DialogTitle>
+            <DialogContent>
+              <DialogContentText id='alert-dialog-slide-description'>
+                It seems that the server is offline or has stopped working. Please try again.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleDialogClose('serverDisconnectDialog')} color='primary'>
                 Ok
               </Button>
             </DialogActions>
