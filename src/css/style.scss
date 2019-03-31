@@ -6,6 +6,16 @@ body {
   padding: 0;
 }
 
+.card {
+  margin: 8px !important;
+  overflow-wrap: break-word;
+  transition: all 0.35s;
+}
+.card:hover {
+  transform: translateY(-10px);
+  padding-bottom: 10px;
+}
+
 #connect-area {
   max-width: 950px;
   margin-right: auto;
@@ -19,4 +29,8 @@ body {
   margin-left: auto;
   padding-left: 25px;
   padding-right: 25px;
+}
+#cards {
+  position: fixed;
+  bottom: 15px;
 }

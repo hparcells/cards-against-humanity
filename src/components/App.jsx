@@ -49,7 +49,8 @@ class App extends Component {
       game: {},
       usernameExistsDialog: false,
       badUsernameDialog: false,
-      serverDisconnectDialog: false
+      serverDisconnectDialog: false,
+      notEnoughPlayersDialog: false
     };
   }
 
@@ -88,6 +89,11 @@ class App extends Component {
         this.setState({ connected: true });
       }
     });
+    SOCKET.on('gameEndNotEnoughPlayers', () => {
+      // TODO: test
+      this.setState({ notEnoughPlayersDialog: true });
+      SOCKET.disconnect();
+    });
     // If the server stops working.
     SOCKET.on('disconnect', () => {
       this.setState({
@@ -96,18 +102,13 @@ class App extends Component {
       });
       SOCKET.disconnect();
 
-      if(!this.state.usernameExistsDialog) {
+      if(!this.state.usernameExistsDialog && !this.state.notEnoughPlayersDialog) {
         this.setState({ serverDisconnectDialog: true });
       }
     });
   }
   start = () => {
     SOCKET.emit('start');
-    this.setState({
-      game: {
-        started: true
-      }
-    });
   }
   disconnect = () => {
     SOCKET.emit('playerDisconnect', this.state.username);
@@ -197,6 +198,26 @@ class App extends Component {
             </DialogContent>
             <DialogActions>
               <Button onClick={this.handleDialogClose('serverDisconnectDialog')} color='primary'>
+                Ok
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog
+            open={this.state.notEnoughPlayersDialog}
+            TransitionComponent={Transition}
+            keepMounted
+            onClose={this.handleDialogClose('badUsernameDialog')}
+            aria-labelledby='alert-dialog-slide-title'
+            aria-describedby='alert-dialog-slide-description'
+          >
+            <DialogTitle id='alert-dialog-slide-title'>Not Enough Players</DialogTitle>
+            <DialogContent>
+              <DialogContentText id='alert-dialog-slide-description'>
+                There were not enough players to continue the game, therefore the game was closed.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleDialogClose('notEnoughPlayersDialog')} color='primary'>
                 Ok
               </Button>
             </DialogActions>
