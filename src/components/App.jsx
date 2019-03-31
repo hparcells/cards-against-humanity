@@ -85,12 +85,14 @@ class App extends Component {
     SOCKET.on('updatedGame', (game) => {
       this.setState({ game: game });
 
+      // TODO: Check if everyone played white card.
+
+      // Set state connected if not set already.
       if(!this.state.connected) {
         this.setState({ connected: true });
       }
     });
     SOCKET.on('gameEndNotEnoughPlayers', () => {
-      // TODO: test
       this.setState({ notEnoughPlayersDialog: true });
       SOCKET.disconnect();
     });
@@ -109,6 +111,22 @@ class App extends Component {
   }
   start = () => {
     SOCKET.emit('start');
+  }
+  playCard = (card) => () => {
+    const isCzar = this.state.game.players.indexOf(this.state.game.players.find((player) => {
+      return this.state.username === player.username;
+    })) === this.state.game.gameState.czar;
+    // TODO: Handle two played cards.
+    const hasPlayedCard = this.state.game.gameState.playedWhiteCards.some((object) => object.username === this.state.username);
+
+    if(!isCzar && !hasPlayedCard) {
+      const clientIndex = this.state.game.players.indexOf(this.state.game.players.find((player) => {
+        return this.state.username === player.username;
+      }));
+
+      // TODO: Handle two played cards.
+      SOCKET.emit('playedCard', this.state.username, this.state.game.players[clientIndex].hand[card]);
+    }
   }
   disconnect = () => {
     SOCKET.emit('playerDisconnect', this.state.username);
@@ -138,7 +156,7 @@ class App extends Component {
 
           {
             this.state.connected
-              ? <Game username={this.state.username} gameState={this.state.game} disconnect={this.disconnect} start={this.start} />
+              ? <Game username={this.state.username} gameState={this.state.game} disconnect={this.disconnect} start={this.start} playCard={this.playCard} />
               : <Start username={this.state.username} handleUsernameChange={this.handleUsernameChange} connect={this.connect} />
           }
 

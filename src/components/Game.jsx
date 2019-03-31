@@ -15,7 +15,7 @@ const styles = (theme) => ({
 
 class Game extends Component {
   render() {
-    const { classes, username, gameState, disconnect, start } = this.props;
+    const { classes, username, gameState, disconnect, start, playCard } = this.props;
 
     return (
       <div id='game-area'>
@@ -27,7 +27,7 @@ class Game extends Component {
                 ? <Button variant='outlined' color='primary' className={classes.button} onClick={start}>Start with {gameState.players.length} Players</Button>
                 : <Button variant='outlined' color='primary' className={classes.button} disabled onClick={start}>Start with {gameState.players.length} Players (Only the Host Can Start the Game)</Button>
               : <Button variant='outlined' color='primary' disabled className={classes.button}>Start ({gameState.players.length} of 4 Players)</Button>
-            : <TheActualGame username={username} gameState={gameState} />
+            : <TheActualGame username={username} gameState={gameState} playCard={playCard} />
         }
       </div>
     );

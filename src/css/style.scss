@@ -7,13 +7,20 @@ body {
 }
 
 .card {
-  margin: 8px !important;
+  min-width: 150px;
   overflow-wrap: break-word;
   transition: all 0.35s;
 }
 .card:hover {
   transform: translateY(-10px);
   padding-bottom: 10px;
+}
+.black-card {
+  min-width: 150px;
+  overflow-wrap: break-word;
+
+  background-color: #212121 !important;
+  color: white !important;
 }
 
 #connect-area {
@@ -25,12 +32,13 @@ body {
 }
 #game-area {
   max-width: 95%;
+  margin-top: 20px;
   margin-right: auto;
   margin-left: auto;
   padding-left: 25px;
   padding-right: 25px;
 }
-#cards {
+#hand {
   position: fixed;
   bottom: 15px;
 }
