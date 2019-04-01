@@ -29,13 +29,13 @@ const styles = (theme) => ({
 
 class TheActualGame extends Component {
   render() {
-    const { classes, username, gameState, playCard } = this.props;
+    const { classes, username, game, playCard, czarPick } = this.props;
     
-    const isCzar = gameState.players.indexOf(gameState.players.find((player) => {
+    const isCzar = game.players.indexOf(game.players.find((player) => {
       return username === player.username;
-    })) === gameState.gameState.czar;
-    const hasPlayedCard = gameState.gameState.playedWhiteCards.some((object) => object.username === username);
-    const clientIndex = gameState.gameState.playedWhiteCards.indexOf(gameState.gameState.playedWhiteCards.find((player) => {
+    })) === game.gameState.czar;
+    const hasPlayedCard = game.gameState.playedWhiteCards.some((object) => object.username === username);
+    const clientIndex = game.gameState.playedWhiteCards.indexOf(game.gameState.playedWhiteCards.find((player) => {
       return username === player.username;
     }));
 
@@ -43,26 +43,26 @@ class TheActualGame extends Component {
       <div className={classes.root}>
         <Grid id='played-cards' container spacing={24}>
           <Grid className='card' item xs={1}>
-            <Paper className={'black-card ' + classes.paper}>{gameState.gameState.blackCard.text}</Paper>
+            <Paper className={'black-card ' + classes.paper}>{game.gameState.blackCard.text}</Paper>
           </Grid>
           <Grid className='card' item xs={1}>
             {
               isCzar
-                ? gameState.gameState.czarReady
+                ? game.gameState.czarReady
                   ? <Paper className={classes.paper} style={{ marginBottom: '10px' }}>Everyone has played. Pick the best white card(s).</Paper>
                   : <Paper className={classes.paper}>You are the Czar... wait for everyone to play.</Paper>
                 : hasPlayedCard
-                  ? gameState.gameState.playedWhiteCards[clientIndex].cards.map((card) => {
+                  ? game.gameState.playedWhiteCards[clientIndex].cards.map((card) => {
                     return <Paper className={classes.paper} style={{ marginBottom: '10px' }}>{card}</Paper>;
                   })
                   : <Paper className={classes.paper}>Click on a card to play it.</Paper>
             }
           </Grid>
           {
-            isCzar && gameState.gameState.czarReady
-              ? gameState.gameState.playedWhiteCards.map((player) => {
+            isCzar && game.gameState.czarReady
+              ? game.gameState.playedWhiteCards.map((player) => {
                 return (
-                  <Grid className='card' item xs={1}>
+                  <Grid className='card' item xs={1} onClick={czarPick(player.username)}>
                     {
                       player.cards.map((card) => {
                         return (
@@ -89,7 +89,7 @@ class TheActualGame extends Component {
 
             <TableBody>
               {
-                gameState.players.map((player) => {
+                game.players.map((player) => {
                   return (
                     <TableRow key={player.username}>
                       <TableCell component='th' scope='row'>
@@ -114,7 +114,7 @@ class TheActualGame extends Component {
           <Typography variant='h4' style={{ marginBottom: '10px' }}>Your Hand:</Typography>
           <Grid container spacing={24}>
             {
-              gameState.players.find((player) => {
+              game.players.find((player) => {
                 return username === player.username;
               }).hand.map((card, cardIndex) => {
                 return (

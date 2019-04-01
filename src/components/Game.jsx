@@ -15,19 +15,19 @@ const styles = (theme) => ({
 
 class Game extends Component {
   render() {
-    const { classes, username, gameState, disconnect, start, playCard } = this.props;
+    const { classes, username, game, disconnect, start, playCard, czarPick } = this.props;
 
     return (
       <div id='game-area'>
         <Beforeunload onBeforeunload={disconnect} />
         {
-          !gameState.started
-            ? gameState.players.length >= 4
-              ? username === gameState.players[0].username
-                ? <Button variant='outlined' color='primary' className={classes.button} onClick={start}>Start with {gameState.players.length} Players</Button>
-                : <Button variant='outlined' color='primary' className={classes.button} disabled onClick={start}>Start with {gameState.players.length} Players (Only the Host Can Start the Game)</Button>
-              : <Button variant='outlined' color='primary' disabled className={classes.button}>Start ({gameState.players.length} of 4 Players)</Button>
-            : <TheActualGame username={username} gameState={gameState} playCard={playCard} />
+          !game.started
+            ? game.players.length >= 4
+              ? username === game.players[0].username
+                ? <Button variant='outlined' color='primary' className={classes.button} onClick={start}>Start with {game.players.length} Players</Button>
+                : <Button variant='outlined' color='primary' className={classes.button} disabled onClick={start}>Start with {game.players.length} Players (Only the Host Can Start the Game)</Button>
+              : <Button variant='outlined' color='primary' disabled className={classes.button}>Start ({game.players.length} of 4 Players)</Button>
+            : <TheActualGame username={username} game={game} playCard={playCard} czarPick={czarPick} />
         }
       </div>
     );

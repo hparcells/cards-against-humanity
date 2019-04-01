@@ -132,6 +132,11 @@ class App extends Component {
       SOCKET.emit('playedCard', this.state.username, this.state.game.players[clientIndex].hand[card]);
     }
   }
+  czarPick = (player) => () => {
+    if(!this.state.game.gameState.czarHasPicked) {
+      SOCKET.emit('czarPicked', player);
+    }
+  }
   disconnect = () => {
     SOCKET.emit('playerDisconnect', this.state.username);
     SOCKET.close();
@@ -160,7 +165,7 @@ class App extends Component {
 
           {
             this.state.connected
-              ? <Game username={this.state.username} gameState={this.state.game} disconnect={this.disconnect} start={this.start} playCard={this.playCard} />
+              ? <Game username={this.state.username} game={this.state.game} disconnect={this.disconnect} start={this.start} playCard={this.playCard} czarPick={this.czarPick} />
               : <Start username={this.state.username} handleUsernameChange={this.handleUsernameChange} connect={this.connect} />
           }
 
