@@ -34,9 +34,6 @@ class TheActualGame extends Component {
       <div className={classes.root}>
         <Grid id='played-cards' container spacing={24}>
           <Grid className='card' item xs={1}>
-            {
-              /* TODO: Handle two played white cards. */
-            }
             <Paper className={'black-card ' + classes.paper}>{gameState.gameState.blackCard.text}</Paper>
           </Grid>
           <Grid className='card' item xs={1}>
@@ -44,8 +41,9 @@ class TheActualGame extends Component {
               isCzar
                 ? <Paper className={classes.paper}>You are the Czar... wait for everyone to play.</Paper>
                 : hasPlayedCard
-                  // TODO: Handle two played white cards.
-                  ? <Paper className={classes.paper}>{gameState.gameState.playedWhiteCards[clientIndex].card}</Paper>
+                  ? gameState.gameState.playedWhiteCards[clientIndex].cards.map((card) => {
+                    return <Paper className={classes.paper} style={{ marginBottom: '10px' }}>{card}</Paper>;
+                  })
                   : <Paper className={classes.paper}>Click on a card to play it.</Paper>
             }
           </Grid>

@@ -116,15 +116,21 @@ class App extends Component {
     const isCzar = this.state.game.players.indexOf(this.state.game.players.find((player) => {
       return this.state.username === player.username;
     })) === this.state.game.gameState.czar;
-    // TODO: Handle two played cards.
-    const hasPlayedCard = this.state.game.gameState.playedWhiteCards.some((object) => object.username === this.state.username);
+    const clientPlayedCards = this.state.game.gameState.playedWhiteCards.find((object) => {
+      return object.username === this.state.username;
+    });
+    
+    let hasPlayedCards;
+    if(clientPlayedCards) {
+      hasPlayedCards = clientPlayedCards.cards.length === this.state.game.gameState.blackCard.pick;
+    }
 
-    if(!isCzar && !hasPlayedCard) {
+    // If the player can play cards.
+    if(!isCzar && !hasPlayedCards) {
       const clientIndex = this.state.game.players.indexOf(this.state.game.players.find((player) => {
         return this.state.username === player.username;
       }));
 
-      // TODO: Handle two played cards.
       SOCKET.emit('playedCard', this.state.username, this.state.game.players[clientIndex].hand[card]);
     }
   }
