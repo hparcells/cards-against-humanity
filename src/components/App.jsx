@@ -85,8 +85,6 @@ class App extends Component {
     SOCKET.on('updatedGame', (game) => {
       this.setState({ game: game });
 
-      // TODO: Check if everyone played white card.
-
       // Set state connected if not set already.
       if(!this.state.connected) {
         this.setState({ connected: true });
