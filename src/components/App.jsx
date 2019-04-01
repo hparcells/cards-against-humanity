@@ -13,6 +13,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItem from '@material-ui/core/ListItem';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
 
 import Start from './Start';
 import Game from './Game';
@@ -30,6 +37,12 @@ const theme = createMuiTheme({
 const styles = {
   root: {
     flexGrow: 1
+  },
+  appBar: {
+    position: 'relative'
+  },
+  flex: {
+    flex: 1
   }
 };
 
@@ -37,6 +50,9 @@ let SOCKET;
 
 function Transition(props) {
   return <Slide direction='up' {...props} />;
+}
+function TransitionLeft(props) {
+  return <Slide {...props} direction='left' />;
 }
 
 class App extends Component {
@@ -50,7 +66,12 @@ class App extends Component {
       usernameExistsDialog: false,
       badUsernameDialog: false,
       serverDisconnectDialog: false,
-      notEnoughPlayersDialog: false
+      notEnoughPlayersDialog: false,
+      endGameDialog: false,
+      snackbarOpen: false,
+      snackbarContent: '',
+      winner: '',
+      clientScore: 0
     };
   }
 
@@ -90,6 +111,25 @@ class App extends Component {
         this.setState({ connected: true });
       }
     });
+    SOCKET.on('roundWinner', (username) => {
+      this.setState({
+        snackbarOpen: true,
+        snackbarContent: `${username} won the round. Next round in three seconds.`
+      });
+    });
+    SOCKET.on('winner', (winnerUsername, players) => {
+      const clientIndex = players.indexOf(players.find((player) => {
+        return this.state.username === player.username;
+      }));
+      
+      this.setState({
+        endGameDialog: true,
+        winner: winnerUsername,
+        clientScore: players[clientIndex].score
+      });
+
+      SOCKET.disconnect();
+    });
     SOCKET.on('gameEndNotEnoughPlayers', () => {
       this.setState({ notEnoughPlayersDialog: true });
       SOCKET.disconnect();
@@ -102,7 +142,7 @@ class App extends Component {
       });
       SOCKET.disconnect();
 
-      if(!this.state.usernameExistsDialog && !this.state.notEnoughPlayersDialog) {
+      if(!this.state.usernameExistsDialog && !this.state.notEnoughPlayersDialog && !this.state.username === '') {
         this.setState({ serverDisconnectDialog: true });
       }
     });
@@ -147,6 +187,16 @@ class App extends Component {
   }
   handleDialogClose = (dialog) => () => {
     this.setState({ [dialog]: false });
+
+    if(dialog === 'endGameDialog') {
+      this.setState({
+        winner: '',
+        clientScore: 0
+      });
+    }
+  };
+  handleSnackbarClose = () => {
+    this.setState({ snackbarOpen: false });
   };
 
   render() {
@@ -168,6 +218,20 @@ class App extends Component {
               ? <Game username={this.state.username} game={this.state.game} disconnect={this.disconnect} start={this.start} playCard={this.playCard} czarPick={this.czarPick} />
               : <Start username={this.state.username} handleUsernameChange={this.handleUsernameChange} connect={this.connect} />
           }
+
+          <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            open={this.state.snackbarOpen}
+            autoHideDuration={3000}
+            TransitionComponent={TransitionLeft}
+            onClose={this.handleSnackbarClose}
+            ContentProps={{
+              'aria-describedby': 'message-id'
+            }}
+            message={
+              <span id='message-id'>{this.state.snackbarContent}</span>
+            }
+          />
 
           <Dialog
             open={this.state.usernameExistsDialog}
@@ -220,7 +284,7 @@ class App extends Component {
             <DialogTitle id='alert-dialog-slide-title'>Server Disconnect</DialogTitle>
             <DialogContent>
               <DialogContentText id='alert-dialog-slide-description'>
-                It seems that the server is offline or has stopped working. Please try again.
+                You have been disconnected from the game. This can be because the game was concluded, server is offline, or that the has stopped working.
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -248,6 +312,28 @@ class App extends Component {
                 Ok
               </Button>
             </DialogActions>
+          </Dialog>
+          <Dialog
+            fullScreen
+            open={this.state.endGameDialog}
+            onClose={this.handleDialogClose('endGameDialog')}
+            TransitionComponent={Transition}
+          >
+            <AppBar className={classes.appBar}>
+              <IconButton color='inherit' onClick={this.handleDialogClose('endGameDialog')} aria-label='Close'>
+                <CloseIcon />
+              </IconButton>
+            </AppBar>
+            <Typography variant='h4' style={{ textAlign: 'center', marginTop: '10px' }}>Game Summrary</Typography>
+            <List>
+              <ListItem>
+                <ListItemText primary='Winner' secondary={this.state.winner} />
+              </ListItem>
+              <Divider />
+              <ListItem>
+                <ListItemText primary='Your Score' secondary={this.state.clientScore} />
+              </ListItem>
+            </List>
           </Dialog>
         </div>
       </MuiThemeProvider>

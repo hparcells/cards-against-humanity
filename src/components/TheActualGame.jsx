@@ -9,6 +9,10 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 
 const styles = (theme) => ({
   root: {
@@ -21,9 +25,12 @@ const styles = (theme) => ({
     minWidth: '13%',
     minHeight: '100px'
   },
-  paperRoot: {
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto'
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular
+  },
+  expansionPanel: {
+    marginTop: '10px'
   }
 });
 
@@ -77,38 +84,42 @@ class TheActualGame extends Component {
           }
         </Grid>
 
-        <Typography variant='h4' style={{ marginTop: '10px' }}>Scores:</Typography>
-        <Paper className={classes.paperRoot}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Player</TableCell>
-                <TableCell>Awesome Points (10 to Win)</TableCell>
-              </TableRow>
-            </TableHead>
+        <ExpansionPanel className={classes.expansionPanel}>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography className={classes.heading}>Scores</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Player</TableCell>
+                  <TableCell>Awesome Points (10 to Win)</TableCell>
+                </TableRow>
+              </TableHead>
 
-            <TableBody>
-              {
-                game.players.map((player) => {
-                  return (
-                    <TableRow key={player.username}>
-                      <TableCell component='th' scope='row'>
-                        {
-                          username === player.username
-                            ? <strong>{player.username} (You)</strong>
-                            : player.username
-                        }
-                      </TableCell>
-                      <TableCell>
-                        {player.score}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
-              }
-            </TableBody>
-          </Table>
-        </Paper>
+              <TableBody>
+                {
+                  game.players.map((player) => {
+                    return (
+                      <TableRow key={player.username}>
+                        <TableCell component='th' scope='row'>
+                          {
+                            username === player.username
+                              ? <strong>{player.username} (You)</strong>
+                              : player.username
+                          }
+                        </TableCell>
+                        <TableCell>
+                          {player.score}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                }
+              </TableBody>
+            </Table>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
 
         <div id='hand'>
           <Typography variant='h4' style={{ marginBottom: '10px' }}>Your Hand:</Typography>
