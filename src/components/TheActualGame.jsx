@@ -28,9 +28,6 @@ const styles = (theme) => ({
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular
-  },
-  expansionPanel: {
-    marginTop: '10px'
   }
 });
 
@@ -52,24 +49,40 @@ class TheActualGame extends Component {
           <Grid className='card' item xs={1}>
             <Paper className={'black-card ' + classes.paper}>{game.gameState.blackCard.text}</Paper>
           </Grid>
-          <Grid className='card' item xs={1}>
-            {
-              isCzar
-                ? game.gameState.czarReady
-                  ? <Paper className={classes.paper} style={{ marginBottom: '10px' }}>Everyone has played. Pick the best white card(s).</Paper>
-                  : <Paper className={classes.paper}>You are the Czar... wait for everyone to play.</Paper>
-                : hasPlayedCard
-                  ? game.gameState.playedWhiteCards[clientIndex].cards.map((card) => {
-                    return <Paper className={classes.paper} style={{ marginBottom: '10px' }}>{card}</Paper>;
-                  })
-                  : <Paper className={classes.paper}>Click on a card to play it.</Paper>
-            }
-          </Grid>
           {
-            isCzar && game.gameState.czarReady
+            isCzar
+              ? game.gameState.czarReady
+                ? <Grid className='card' item xs={1}>
+                  <Paper className={classes.paper} style={{ marginBottom: '10px' }}>Everyone has played. Pick the best white card(s).</Paper>
+                </Grid>
+                : <Grid className='card' item xs={1}>
+                  <Paper className={classes.paper}>You are the Czar... wait for everyone to play.</Paper>
+                </Grid>
+              : hasPlayedCard
+                ? !game.gameState.czarReady
+                  ? game.gameState.playedWhiteCards[clientIndex].cards.map((card) => {
+                    return (
+                      <Grid className='card' item xs={1}>
+                        <Paper className={classes.paper} style={{ marginBottom: '10px' }}>{card}</Paper>
+                      </Grid>
+                    );
+                  })
+                  : <Grid className='card' item xs={1}>
+                    <Paper className={classes.paper} style={{ marginBottom: '10px' }}>Wait for the Czar to pick the best white card(s).</Paper>
+                  </Grid>
+                : <Grid className='card' item xs={1}>
+                  <Paper className={classes.paper}>Click on a card to play it.</Paper>
+                </Grid>
+          }
+          {
+            game.gameState.czarReady
               ? game.gameState.playedWhiteCards.map((player) => {
                 return (
-                  <Grid className='card' item xs={1} onClick={czarPick(player.username)}>
+                  <Grid className='card' item xs={1} onClick={
+                    isCzar
+                      ? czarPick(player.username)
+                      : null
+                  }>
                     {
                       player.cards.map((card) => {
                         return (
