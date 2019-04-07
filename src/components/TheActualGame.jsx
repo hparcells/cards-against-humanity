@@ -84,7 +84,7 @@ class TheActualGame extends Component {
           }
         </Grid>
 
-        <ExpansionPanel className={classes.expansionPanel}>
+        <ExpansionPanel style={{ marginTop: '20px' }}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography className={classes.heading}>Scores</Typography>
           </ExpansionPanelSummary>
@@ -99,14 +99,18 @@ class TheActualGame extends Component {
 
               <TableBody>
                 {
-                  game.players.map((player) => {
+                  game.players.map((player, playerIndex) => {
                     return (
                       <TableRow key={player.username}>
                         <TableCell component='th' scope='row'>
                           {
-                            username === player.username
-                              ? <strong>{player.username} (You)</strong>
-                              : player.username
+                            playerIndex === game.gameState.czar
+                              ? player.username === username
+                                ? <strong>> {player.username} (You)</strong>
+                                : `> ${player.username}`
+                              : player.username === username
+                                ? <strong>{player.username} (You)</strong>
+                                : player.username
                           }
                         </TableCell>
                         <TableCell>
