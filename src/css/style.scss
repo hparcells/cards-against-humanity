@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Heebo:800');
+
 * {
   font-family: sans-serif;
 }
@@ -15,12 +17,19 @@ body {
   transform: translateY(-10px);
   padding-bottom: 10px;
 }
+.card {
+  div {
+    font-family: 'Heebo', sans-serif;
+  }
+}
 .black-card {
   min-width: 150px;
   overflow-wrap: break-word;
 
   background-color: #212121 !important;
   color: white !important;
+
+  font-family: 'Heebo', sans-serif;
 }
 
 #connect-area {

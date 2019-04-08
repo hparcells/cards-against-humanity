@@ -4,6 +4,14 @@ import { withStyles } from '@material-ui/core/styles';
 import Beforeunload from 'react-beforeunload';
 import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
+import Fab from '@material-ui/core/Fab';
+import SettingsIcon from '@material-ui/icons/Settings';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import WarningIcon from '@material-ui/icons/Warning';
 
 import TheActualGame from './TheActualGame';
 
@@ -11,12 +19,36 @@ const styles = (theme) => ({
   button: {
     margin: theme.spacing.unit,
     marginTop: '35px'
+  },
+  fab: {
+    position: 'absolute',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2
+  },
+  list: {
+    width: 250
   }
 });
 
 class Game extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      adminPanelOpen: false
+    };
+  }
+
+  toggleAdminPanel = (open) => () => {
+    this.setState({ adminPanelOpen: open });
+  }
+
   render() {
-    const { classes, username, game, disconnect, start, playCard, czarPick } = this.props;
+    const { classes, username, game, disconnect, start, playCard, czarPick, kill } = this.props;
+
+    const clientIndex = game.players.indexOf(game.players.find((player) => {
+      return username === player.username;
+    }));
 
     return (
       <div id='game-area'>
@@ -46,6 +78,40 @@ class Game extends Component {
                 </ul>
               </>
             : <TheActualGame username={username} game={game} playCard={playCard} czarPick={czarPick} />
+        }
+        {
+          clientIndex === 0
+            ? <div id='admin-panel'>
+              <Fab color='primary' aria-label='Settings' className={classes.fab} onClick={this.toggleAdminPanel(true)}>
+                <SettingsIcon />
+              </Fab>
+              <SwipeableDrawer
+                anchor='right'
+                open={this.state.adminPanelOpen}
+                onClose={this.toggleAdminPanel(false)}
+                onOpen={this.toggleAdminPanel(true)}
+              >
+                <div
+                  tabIndex={0}
+                  role='button'
+                  onKeyDown={this.toggleAdminPanel(false)}
+                >
+                  <Typography variant='h4' style={{
+                    textAlign: 'center',
+                    marginTop: '20px'
+                  }}>Admin Panel</Typography>
+                  <div className={classes.list}>
+                    <List>
+                      <ListItem button onClick={kill}>
+                        <ListItemIcon><WarningIcon /></ListItemIcon>
+                        <ListItemText primary='Kill Game' />
+                      </ListItem>
+                    </List>
+                  </div>
+                </div>
+              </SwipeableDrawer>
+            </div>
+            : null
         }
       </div>
     );
