@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - AFK players will softlock the game.
 - The deck will run out and could have unintended consequences.
 - Players can't join a game in progress.
-- There is an inconsistancy with players leaving makeing the game playable after a game ended.
+- There is an inconsistancy with players leaving making the game playable after a game ended.
 
 ## 1.0.0 [04/01/2019]
 ### Additions
