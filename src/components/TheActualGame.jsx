@@ -13,6 +13,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ReactHtmlParser from 'react-html-parser';
 
 const styles = (theme) => ({
   root: {
@@ -63,7 +64,7 @@ class TheActualGame extends Component {
                   ? game.gameState.playedWhiteCards[clientIndex].cards.map((card) => {
                     return (
                       <Grid className='card' item xs={1}>
-                        <Paper className={classes.paper} style={{ marginBottom: '10px' }}>{card}</Paper>
+                        <Paper className={classes.paper} style={{ marginBottom: '10px' }}>{ReactHtmlParser(card)}</Paper>
                       </Grid>
                     );
                   })
@@ -86,7 +87,7 @@ class TheActualGame extends Component {
                     {
                       player.cards.map((card) => {
                         return (
-                          <Paper className={classes.paper} style={{ marginBottom: '10px' }}>{card}</Paper>
+                          <Paper className={classes.paper} style={{ marginBottom: '10px' }}>{ReactHtmlParser(card)}</Paper>
                         );
                       })
                     }
@@ -147,7 +148,7 @@ class TheActualGame extends Component {
               }).hand.map((card, cardIndex) => {
                 return (
                   <Grid className='card' item xs={1} key={cardIndex} onClick={playCard(cardIndex)}>
-                    <Paper className={classes.paper}>{card}</Paper>
+                    <Paper className={classes.paper}>{ReactHtmlParser(card)}</Paper>
                   </Grid>
                 );
               })
