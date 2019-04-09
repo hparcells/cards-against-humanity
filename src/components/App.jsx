@@ -60,9 +60,11 @@ class App extends Component {
     super(props);
 
     this.state = {
+      // Game
       username: '',
       connected: false,
       game: {},
+      // Dialogs and text.
       usernameExistsDialog: false,
       badUsernameDialog: false,
       serverDisconnectDialog: false,
@@ -70,6 +72,7 @@ class App extends Component {
       endGameDialog: false,
       snackbarOpen: false,
       snackbarContent: '',
+      // Post game.
       winner: '',
       clientScore: 0
     };
@@ -111,12 +114,14 @@ class App extends Component {
         this.setState({ connected: true });
       }
     });
+    // When the Czar picks the winner for the round.
     SOCKET.on('roundWinner', (username) => {
       this.setState({
         snackbarOpen: true,
         snackbarContent: `${username} won the round. Next round in three seconds.`
       });
     });
+    // When someone wins.
     SOCKET.on('winner', (winnerUsername, players) => {
       const clientIndex = players.indexOf(players.find((player) => {
         return this.state.username === player.username;
@@ -130,6 +135,7 @@ class App extends Component {
 
       SOCKET.disconnect();
     });
+    // If there isn't enough people to continue the game.
     SOCKET.on('gameEndNotEnoughPlayers', () => {
       this.setState({ notEnoughPlayersDialog: true });
       SOCKET.disconnect();
@@ -146,6 +152,20 @@ class App extends Component {
         this.setState({ serverDisconnectDialog: true });
       }
     });
+  }
+  toggleDeck = (deckCodeName) => () => {
+    // Fail safe even though the checkbox is disabled.
+    if(deckCodeName !== 'base-set') {
+      const newState = this.state.game;
+      const deckArray = newState.decks;
+      const deckIndex = deckArray.indexOf(deckArray.find((deck) => {
+        return deck.codeName === deckCodeName;
+      }));
+      deckArray[deckIndex].selected = !deckArray[deckIndex].selected;
+      
+      SOCKET.emit('updatedDecks', newState.decks);
+      this.setState(newState);
+    }
   }
   start = () => {
     SOCKET.emit('start');
@@ -218,7 +238,17 @@ class App extends Component {
 
           {
             this.state.connected
-              ? <Game username={this.state.username} game={this.state.game} disconnect={this.disconnect} start={this.start} playCard={this.playCard} czarPick={this.czarPick} kill={this.kill} />
+              ? <Game
+                username={this.state.username}
+                game={this.state.game}
+                disconnect={this.disconnect}
+                start={this.start}
+                playCard={this.playCard}
+                czarPick={this.czarPick}
+                kill={this.kill}
+                decks={this.state.game.decks}
+                toggleDeck={this.toggleDeck}
+              />
               : <Start username={this.state.username} handleUsernameChange={this.handleUsernameChange} connect={this.connect} />
           }
 

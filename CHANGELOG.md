@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes
 - The font of the cards more closely resembles the font on the actual card. It sill looks funky and I might change it later.
+- The color of text on the white card is an off-black (#383838). Pure black looked weird.
 
 ### Known Bugs
 - AFK players will softlock the game.

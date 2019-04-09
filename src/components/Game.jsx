@@ -12,6 +12,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import WarningIcon from '@material-ui/icons/Warning';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import TheActualGame from './TheActualGame';
 
@@ -44,7 +47,7 @@ class Game extends Component {
   }
 
   render() {
-    const { classes, username, game, disconnect, start, playCard, czarPick, kill } = this.props;
+    const { classes, username, game, disconnect, start, playCard, czarPick, kill, decks, toggleDeck } = this.props;
 
     const clientIndex = game.players.indexOf(game.players.find((player) => {
       return username === player.username;
@@ -64,15 +67,73 @@ class Game extends Component {
                     : <Button variant='outlined' color='primary' disabled className={classes.button}>Start ({game.players.length} of 4 Players)</Button>
                 }
 
+                <Typography variant='h4' style={{ marginTop: '20px' }}>Select Decks to Use</Typography>
+                <Typography variant='h5'>Official</Typography>
+                <FormGroup row>
+                  {
+                    decks.filter((deck) => deck.official).map((deck) => {
+                      const codeName = deck.codeName;
+                      const deckIndex = decks.findIndex((deck) => {
+                        return deck.codeName === codeName;
+                      });
+
+                      return (
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={decks[deckIndex].selected}
+                              onChange={toggleDeck(codeName)}
+                              value='codeName'
+                              color='primary'
+                              disabled
+                            />
+                          }
+                          label={deck.name}
+                        />
+                      );
+                    })
+                  }
+                </FormGroup>
+                <Typography variant='h5'>Unofficial</Typography>
+                <FormGroup row>
+                  {
+                    decks.filter((deck) => !deck.official).map((deck) => {
+                      const codeName = deck.codeName;
+                      const deckIndex = decks.findIndex((deck) => {
+                        return deck.codeName === codeName;
+                      });
+
+                      return (
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={decks[deckIndex].selected}
+                              onChange={toggleDeck(codeName)}
+                              value='codeName'
+                              color='primary'
+                              disabled={clientIndex !== 0}
+                            />
+                          }
+                          label={deck.name}
+                        />
+                      );
+                    })
+                  }
+                </FormGroup>
+
                 <Typography variant='h4' style={{ marginTop: '20px' }}>Connected Players</Typography>
                 <ul>
                   {
                     game.players.map((player) => {
-                      return <li><Typography>{
-                        player.username === username
-                          ? <strong>{player.username} (You)</strong>
-                          : player.username
-                      }</Typography></li>;
+                      return (
+                        <li>
+                          <Typography>{
+                            player.username === username
+                              ? <strong>{player.username} (You)</strong>
+                              : player.username
+                          }</Typography>
+                        </li>
+                      );
                     })
                   }
                 </ul>
