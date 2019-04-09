@@ -85,7 +85,7 @@ class Game extends Component {
                               onChange={toggleDeck(codeName)}
                               value='codeName'
                               color='primary'
-                              disabled
+                              disabled={clientIndex !== 0 || deck.codeName === 'base-set'}
                             />
                           }
                           label={deck.name}
