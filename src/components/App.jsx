@@ -23,6 +23,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 import Start from './Start';
 import Game from './Game';
+import playSound from '../js/play-sound';
 
 const theme = createMuiTheme({
   palette: {
@@ -86,6 +87,8 @@ class App extends Component {
 
     if(username === '' || username.length > 16) {
       this.setState({ badUsernameDialog: true });
+      playSound('dialog');
+      
       return;
     }
 
@@ -94,6 +97,8 @@ class App extends Component {
     const CONNECT_TIMEOUT = setTimeout(() => {
       SOCKET.disconnect();
       this.setState({ serverDisconnectDialog: true });
+      
+      playSound('dialog');
     }, 1500);
 
     // When the client connects.
@@ -104,6 +109,7 @@ class App extends Component {
     // If the username already exists in the server.
     SOCKET.on('usernameExists', () => {
       this.setState({ usernameExistsDialog: true });
+      playSound('dialog');
     });
     // New game data.
     SOCKET.on('updatedGame', (game) => {
@@ -120,6 +126,7 @@ class App extends Component {
         snackbarOpen: true,
         snackbarContent: `${username} won the round. Next round in three seconds.`
       });
+      playSound('round-winner');
     });
     // When someone wins.
     SOCKET.on('winner', (winnerUsername, players) => {
@@ -132,13 +139,15 @@ class App extends Component {
         winner: winnerUsername,
         clientScore: players[clientIndex].score
       });
-
       SOCKET.disconnect();
+      playSound('winner');
     });
     // If there isn't enough people to continue the game.
     SOCKET.on('gameEndNotEnoughPlayers', () => {
       this.setState({ notEnoughPlayersDialog: true });
       SOCKET.disconnect();
+
+      playSound('dialog');
     });
     // If the server stops working.
     SOCKET.on('disconnect', () => {
@@ -147,9 +156,11 @@ class App extends Component {
         game: {}
       });
       SOCKET.disconnect();
-
+      
       if(!this.state.usernameExistsDialog && !this.state.notEnoughPlayersDialog && !this.state.username === '') {
         this.setState({ serverDisconnectDialog: true });
+
+        playSound('dialog');
       }
     });
   }
@@ -190,6 +201,7 @@ class App extends Component {
       }));
 
       SOCKET.emit('playedCard', this.state.username, this.state.game.players[clientIndex].hand[card]);
+      playSound('play');
     }
   }
   czarPick = (player) => () => {

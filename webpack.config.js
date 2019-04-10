@@ -38,6 +38,10 @@ module.exports = {
           'css-loader',
           'sass-loader'
         ]
+      },
+      {
+        test: /\.wav$/,
+        loader: 'file-loader'
       }
     ]
   },
