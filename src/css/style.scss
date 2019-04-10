@@ -11,9 +11,25 @@ body {
 .card {
   min-width: 150px;
   overflow-wrap: break-word;
-  transition: all 0.35s;
+  transition: transform 350ms cubic-bezier(0.19, 1, 0.22, 1), opacity 350ms linear, margin-right 350ms cubic-bezier(0.19, 1, 0.22, 1);
 }
-.card:hover {
+.item-enter {
+  transform: translateX(100vw);
+}
+.item-enter-active {
+  transform: translateX(0);
+}
+.item-exit {
+  transform: translateY(0);
+  opacity: 1;
+  margin-right: 0;
+}
+.item-exit-active {
+  transform: translateY(-60vh);
+  opacity: 0; 
+  margin-right: -150px!important;
+}
+.card:hover:not(.item-exit-active) {
   transform: translateY(-10px);
   padding-bottom: 10px;
 }

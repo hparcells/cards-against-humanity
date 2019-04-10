@@ -99,7 +99,7 @@ class App extends Component {
     }
 
     // TODO: Update
-    SOCKET = io('http://localhost:3000/');
+    SOCKET = io('http://cah.servegame.com:3000/');
     const CONNECT_TIMEOUT = setTimeout(() => {
       SOCKET.disconnect();
       this.setState({

@@ -14,6 +14,8 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Interweave from 'interweave';
+import ReactHtmlParser from 'react-html-parser';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 const styles = (theme) => ({
   root: {
@@ -142,17 +144,27 @@ class TheActualGame extends Component {
         <div id='hand'>
           <Typography variant='h4' style={{ marginBottom: '10px' }}>Your Hand:</Typography>
           <Grid container spacing={24}>
-            {
-              game.players.find((player) => {
-                return username === player.username;
-              }).hand.map((card, cardIndex) => {
-                return (
-                  <Grid className='card' item xs={1} key={cardIndex} onClick={playCard(cardIndex)}>
-                    <Paper className={classes.paper}><Interweave content={card} /></Paper>
-                  </Grid>
-                );
-              })
-            }
+            <TransitionGroup component={React.Fragment}>
+              {
+                game.players.find((player) => {
+                  return username === player.username;
+                }).hand.map((card, cardIndex) => {
+                  return (
+                    <CSSTransition
+                      key={card}
+                      timeout={500}
+                      classNames="item"
+                    >
+                      <Grid
+                        className='card'
+                        item xs={1} onClick={playCard(cardIndex)}>
+                        <Paper className={classes.paper}><Interweave content={card} /></Paper>
+                      </Grid>
+                    </CSSTransition>
+                  );
+                })
+              }
+            </TransitionGroup>
           </Grid>
         </div>
       </div>
