@@ -95,6 +95,9 @@ class Game extends Component {
                   }
                 </FormGroup>
                 <Typography variant='h5'>Unofficial</Typography>
+                <Typography paragraph>[A] cards represent those decks found on <a href='https://crhallberg.com/cah/' target='_blank' rel='noreferrer noopener'>JSON Against Humanity</a>,
+                  and [B] cards are the deck myself or friends have made.
+                </Typography>
                 <FormGroup row>
                   {
                     decks.filter((deck) => !deck.official).map((deck) => {
