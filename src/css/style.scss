@@ -11,23 +11,27 @@ body {
 .card {
   min-width: 150px;
   overflow-wrap: break-word;
-  transition: transform 350ms cubic-bezier(0.19, 1, 0.22, 1);
+  transition: transform 350ms cubic-bezier(0.19, 1, 0.22, 1), opacity 350ms linear, margin-right 350ms cubic-bezier(0.19, 1, 0.22, 1);
 }
 .item-enter {
-  transform: translate(100vw);
+  transform: translateX(100vw);
 }
 .item-enter-active {
   transform: translateX(0);
 }
 .item-exit {
-  transform: translateX(0);
+  transform: translateY(0);
+  opacity: 1;
+  margin-right: 0;
 }
 .item-exit-active {
-  transform: translate(100vw);
+  transform: translateY(-60vh);
+  opacity: 0; 
+  margin-right: -150px!important;
 }
-.card:hover {
-  // transform: translateY(-10px);
-  // padding-bottom: 10px;
+.card:hover:not(.item-exit-active) {
+  transform: translateY(-10px);
+  padding-bottom: 10px;
 }
 .card {
   div {
