@@ -13,7 +13,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ReactHtmlParser from 'react-html-parser';
+import Interweave from 'interweave';
 
 const styles = (theme) => ({
   root: {
@@ -48,7 +48,7 @@ class TheActualGame extends Component {
       <div className={classes.root}>
         <Grid id='played-cards' container spacing={24}>
           <Grid className='card' item xs={1}>
-            <Paper className={'black-card ' + classes.paper}>{game.gameState.blackCard.text}</Paper>
+            <Paper className={'black-card ' + classes.paper}><Interweave content={game.gameState.blackCard.text} /></Paper>
           </Grid>
           {
             isCzar
@@ -64,7 +64,7 @@ class TheActualGame extends Component {
                   ? game.gameState.playedWhiteCards[clientIndex].cards.map((card) => {
                     return (
                       <Grid className='card' item xs={1}>
-                        <Paper className={classes.paper} style={{ marginBottom: '10px' }}>{ReactHtmlParser(card)}</Paper>
+                        <Paper className={classes.paper} style={{ marginBottom: '10px' }}><Interweave content={card} /></Paper>
                       </Grid>
                     );
                   })
@@ -87,7 +87,7 @@ class TheActualGame extends Component {
                     {
                       player.cards.map((card) => {
                         return (
-                          <Paper className={classes.paper} style={{ marginBottom: '10px' }}>{ReactHtmlParser(card)}</Paper>
+                          <Paper className={classes.paper} style={{ marginBottom: '10px' }}><Interweave content={card} /></Paper>
                         );
                       })
                     }
@@ -148,7 +148,7 @@ class TheActualGame extends Component {
               }).hand.map((card, cardIndex) => {
                 return (
                   <Grid className='card' item xs={1} key={cardIndex} onClick={playCard(cardIndex)}>
-                    <Paper className={classes.paper}>{ReactHtmlParser(card)}</Paper>
+                    <Paper className={classes.paper}><Interweave content={card} /></Paper>
                   </Grid>
                 );
               })
