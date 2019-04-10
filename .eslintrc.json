@@ -51,7 +51,6 @@
     "comma-spacing": [2,{"after":true}],
     "eol-last": 2,
     "indent": [2,2],
-    "linebreak-style": [2,"windows"],
     "no-array-constructor": 2,
     "no-continue": 2,
     "no-inline-comments": 2,
