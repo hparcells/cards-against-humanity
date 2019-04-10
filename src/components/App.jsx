@@ -66,10 +66,11 @@ class App extends Component {
       connected: false,
       game: {},
       // Dialogs and text.
-      usernameExistsDialog: false,
-      badUsernameDialog: false,
-      serverDisconnectDialog: false,
-      notEnoughPlayersDialog: false,
+      dialog: {
+        open: false,
+        title: '',
+        content: ''
+      },
       endGameDialog: false,
       snackbarOpen: false,
       snackbarContent: '',
@@ -86,8 +87,13 @@ class App extends Component {
     const { username } = this.state;
 
     if(username === '' || username.length > 16) {
-      this.setState({ badUsernameDialog: true });
-      playSound('dialog');
+      this.setState({
+        dialog: {
+          open: true,
+          title: 'Invalid Username',
+          content: 'Your username was invalid. Your username must not be blank and has to be at most 16 characters.'
+        }
+      });
       
       return;
     }
@@ -96,7 +102,13 @@ class App extends Component {
     SOCKET = io('http://localhost:3000/');
     const CONNECT_TIMEOUT = setTimeout(() => {
       SOCKET.disconnect();
-      this.setState({ serverDisconnectDialog: true });
+      this.setState({
+        dialog: {
+          open: true,
+          title: 'Could Not Connect',
+          content: 'The client took too long to connect to the server. The server may be down. Try again later.'
+        }
+      });
       
       playSound('dialog');
     }, 1500);
@@ -108,7 +120,13 @@ class App extends Component {
     });
     // If the username already exists in the server.
     SOCKET.on('usernameExists', () => {
-      this.setState({ usernameExistsDialog: true });
+      this.setState({
+        dialog: {
+          open: true,
+          title: 'Username Exists in Game',
+          content: 'There is another person inside the game with the same username. Try again with another username or wait.'
+        }
+      });
       playSound('dialog');
     });
     // New game data.
@@ -144,7 +162,13 @@ class App extends Component {
     });
     // If there isn't enough people to continue the game.
     SOCKET.on('gameEndNotEnoughPlayers', () => {
-      this.setState({ notEnoughPlayersDialog: true });
+      this.setState({
+        dialog: {
+          open: true,
+          title: 'Not Enough Players',
+          content: 'There were not enough players to continue the game, therefore the game was closed.'
+        }
+      });
       SOCKET.disconnect();
 
       playSound('dialog');
@@ -158,7 +182,13 @@ class App extends Component {
       SOCKET.disconnect();
       
       if(!this.state.usernameExistsDialog && !this.state.notEnoughPlayersDialog && !this.state.username === '') {
-        this.setState({ serverDisconnectDialog: true });
+        this.setState({
+          dialog: {
+            open: true,
+            title: 'Server Disconnect',
+            content: 'You have been disconnected from the game. This can be because the game was concluded, server is offline, or that the has stopped working.'
+          }
+        });
 
         playSound('dialog');
       }
@@ -220,16 +250,14 @@ class App extends Component {
   kill = () => {
     SOCKET.emit('kill');
   }
-  handleDialogClose = (dialog) => () => {
-    this.setState({ [dialog]: false });
-
-    if(dialog === 'endGameDialog') {
-      this.setState({
-        winner: '',
-        clientScore: 0
-      });
-    }
+  closeDialog = () => {
+    this.setState({
+      dialog: { open: false }
+    });
   };
+  closeEndGameDialog = () => {
+    this.setState({ endGameDialog: false });
+  }
   handleSnackbarClose = () => {
     this.setState({ snackbarOpen: false });
   };
@@ -279,81 +307,21 @@ class App extends Component {
           />
 
           <Dialog
-            open={this.state.usernameExistsDialog}
+            open={this.state.dialog.open}
             TransitionComponent={Transition}
             keepMounted
-            onClose={this.handleDialogClose('usernameExistsDialog')}
+            onClose={this.closeDialog}
             aria-labelledby='alert-dialog-slide-title'
             aria-describedby='alert-dialog-slide-description'
           >
-            <DialogTitle id='alert-dialog-slide-title'>Username Exists in Game</DialogTitle>
+            <DialogTitle id='alert-dialog-slide-title'>{this.state.dialog.title}</DialogTitle>
             <DialogContent>
               <DialogContentText id='alert-dialog-slide-description'>
-                There is another person inside the game with the same username. Try again with another username or wait.
+                {this.state.dialog.content}
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={this.handleDialogClose('usernameExistsDialog')} color='primary'>
-                Ok
-              </Button>
-            </DialogActions>
-          </Dialog>
-          <Dialog
-            open={this.state.badUsernameDialog}
-            TransitionComponent={Transition}
-            keepMounted
-            onClose={this.handleDialogClose('badUsernameDialog')}
-            aria-labelledby='alert-dialog-slide-title'
-            aria-describedby='alert-dialog-slide-description'
-          >
-            <DialogTitle id='alert-dialog-slide-title'>Bad Username</DialogTitle>
-            <DialogContent>
-              <DialogContentText id='alert-dialog-slide-description'>
-                Your username was invalid. Your username must not be blank and has to be at most 16 characters.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.handleDialogClose('badUsernameDialog')} color='primary'>
-                Ok
-              </Button>
-            </DialogActions>
-          </Dialog>
-          <Dialog
-            open={this.state.serverDisconnectDialog}
-            TransitionComponent={Transition}
-            keepMounted
-            onClose={this.handleDialogClose('badUsernameDialog')}
-            aria-labelledby='alert-dialog-slide-title'
-            aria-describedby='alert-dialog-slide-description'
-          >
-            <DialogTitle id='alert-dialog-slide-title'>Server Disconnect</DialogTitle>
-            <DialogContent>
-              <DialogContentText id='alert-dialog-slide-description'>
-                You have been disconnected from the game. This can be because the game was concluded, server is offline, or that the has stopped working.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.handleDialogClose('serverDisconnectDialog')} color='primary'>
-                Ok
-              </Button>
-            </DialogActions>
-          </Dialog>
-          <Dialog
-            open={this.state.notEnoughPlayersDialog}
-            TransitionComponent={Transition}
-            keepMounted
-            onClose={this.handleDialogClose('badUsernameDialog')}
-            aria-labelledby='alert-dialog-slide-title'
-            aria-describedby='alert-dialog-slide-description'
-          >
-            <DialogTitle id='alert-dialog-slide-title'>Not Enough Players</DialogTitle>
-            <DialogContent>
-              <DialogContentText id='alert-dialog-slide-description'>
-                There were not enough players to continue the game, therefore the game was closed.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.handleDialogClose('notEnoughPlayersDialog')} color='primary'>
+              <Button onClick={this.closeDialog} color='primary'>
                 Ok
               </Button>
             </DialogActions>
@@ -361,11 +329,11 @@ class App extends Component {
           <Dialog
             fullScreen
             open={this.state.endGameDialog}
-            onClose={this.handleDialogClose('endGameDialog')}
+            onClose={this.closeEndGameDialog}
             TransitionComponent={Transition}
           >
             <AppBar className={classes.appBar}>
-              <IconButton color='inherit' onClick={this.handleDialogClose('endGameDialog')} aria-label='Close'>
+              <IconButton color='inherit' onClick={this.closeEndGameDialog} aria-label='Close'>
                 <CloseIcon />
               </IconButton>
             </AppBar>
