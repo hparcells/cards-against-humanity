@@ -11,11 +11,23 @@ body {
 .card {
   min-width: 150px;
   overflow-wrap: break-word;
-  transition: all 0.35s;
+  transition: transform 350ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+.item-enter {
+  transform: translate(100vw);
+}
+.item-enter-active {
+  transform: translateX(0);
+}
+.item-exit {
+  transform: translateX(0);
+}
+.item-exit-active {
+  transform: translate(100vw);
 }
 .card:hover {
-  transform: translateY(-10px);
-  padding-bottom: 10px;
+  // transform: translateY(-10px);
+  // padding-bottom: 10px;
 }
 .card {
   div {

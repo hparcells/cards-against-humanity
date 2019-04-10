@@ -60,7 +60,7 @@ class Game extends Component {
           !game.started
             ? <>
                 {
-                  game.players.length >= 4
+                  game.players.length >= -1
                     ? username === game.players[0].username
                       ? <Button variant='outlined' color='primary' className={classes.button} onClick={start}>Start with {game.players.length} Players</Button>
                       : <Button variant='outlined' color='primary' className={classes.button} disabled onClick={start}>Start with {game.players.length} Players (Only the Host Can Start the Game)</Button>
