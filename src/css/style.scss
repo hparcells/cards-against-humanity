@@ -33,10 +33,15 @@ body {
   transform: translateY(-10px);
   padding-bottom: 10px;
 }
-.card {
+.white-card {
   div {
     font-family: 'Heebo', sans-serif;
     color: #383838;
+    
+    span {
+      font-family: 'Heebo', sans-serif;
+      color: #383838;
+    }
   }
 }
 .black-card {
@@ -46,7 +51,9 @@ body {
   background-color: #212121 !important;
   color: white !important;
 
-  font-family: 'Heebo', sans-serif;
+  span {
+    font-family: 'Heebo', sans-serif;
+  }
 }
 
 #connect-area {

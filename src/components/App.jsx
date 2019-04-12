@@ -99,7 +99,7 @@ class App extends Component {
     }
 
     // TODO: Update
-    SOCKET = io('http://cah.servegame.com:3000/');
+    SOCKET = io('http://localhost:3000/');
     const CONNECT_TIMEOUT = setTimeout(() => {
       SOCKET.disconnect();
       this.setState({
@@ -125,6 +125,16 @@ class App extends Component {
           open: true,
           title: 'Username Exists in Game',
           content: 'There is another person inside the game with the same username. Try again with another username or wait.'
+        }
+      });
+      playSound('dialog');
+    });
+    SOCKET.on('badCustomDeck', (error) => {
+      this.setState({
+        dialog: {
+          open: true,
+          title: 'Bad JSON',
+          content: error
         }
       });
       playSound('dialog');
@@ -208,6 +218,9 @@ class App extends Component {
       this.setState(newState);
     }
   }
+  newCustomDeck = (file) => () => {
+    SOCKET.emit('newCustomDeck', file);
+  }
   start = () => {
     SOCKET.emit('start');
   }
@@ -288,8 +301,13 @@ class App extends Component {
                 kill={this.kill}
                 decks={this.state.game.decks}
                 toggleDeck={this.toggleDeck}
+                newCustomDeck={this.newCustomDeck}
               />
-              : <Start username={this.state.username} handleUsernameChange={this.handleUsernameChange} connect={this.connect} />
+              : <Start
+                username={this.state.username}
+                handleUsernameChange={this.handleUsernameChange}
+                connect={this.connect}
+              />
           }
 
           <Snackbar

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - When the Czar picks a card.
   - When someone wins.
   - When a dialog pops up.
+  - Animations when playing a card and recieving a card.
 
 ### Changes
 - New cards are drawn after the Czar picks.

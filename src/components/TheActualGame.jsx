@@ -55,25 +55,25 @@ class TheActualGame extends Component {
           {
             isCzar
               ? game.gameState.czarReady
-                ? <Grid className='card' item xs={1}>
+                ? <Grid className='card white-card' item xs={1}>
                   <Paper className={classes.paper} style={{ marginBottom: '10px' }}>Everyone has played. Pick the best white card(s).</Paper>
                 </Grid>
-                : <Grid className='card' item xs={1}>
+                : <Grid className='card white-card' item xs={1}>
                   <Paper className={classes.paper}>You are the Czar... wait for everyone to play.</Paper>
                 </Grid>
               : hasPlayedCard
                 ? !game.gameState.czarReady
                   ? game.gameState.playedWhiteCards[clientIndex].cards.map((card) => {
                     return (
-                      <Grid className='card' item xs={1}>
+                      <Grid className='card white-card' item xs={1}>
                         <Paper className={classes.paper} style={{ marginBottom: '10px' }}><Interweave content={card} /></Paper>
                       </Grid>
                     );
                   })
-                  : <Grid className='card' item xs={1}>
+                  : <Grid className='card white-card' item xs={1}>
                     <Paper className={classes.paper} style={{ marginBottom: '10px' }}>Wait for the Czar to pick the best white card(s).</Paper>
                   </Grid>
-                : <Grid className='card' item xs={1}>
+                : <Grid className='card white-card' item xs={1}>
                   <Paper className={classes.paper}>Click on a card to play it.</Paper>
                 </Grid>
           }
@@ -81,7 +81,7 @@ class TheActualGame extends Component {
             game.gameState.czarReady
               ? game.gameState.playedWhiteCards.map((player) => {
                 return (
-                  <Grid className='card' item xs={1} onClick={
+                  <Grid className='card white-card' item xs={1} onClick={
                     isCzar
                       ? czarPick(player.username)
                       : null
@@ -156,7 +156,7 @@ class TheActualGame extends Component {
                       classNames="item"
                     >
                       <Grid
-                        className='card'
+                        className='card white-card'
                         item xs={1} onClick={playCard(cardIndex)}>
                         <Paper className={classes.paper}><Interweave content={card} /></Paper>
                       </Grid>
