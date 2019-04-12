@@ -14,10 +14,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Animations when playing a card and recieving a card.
 - Custom sets!
   - You can now import a JSON file (documentation coming soon) to load custom cards that you want to play with.
-- Extended the Programmer Pack
+- Extended the Programmer Pack.
+- Displays name in the top right corner.
+- Black cards show how many white cards must be picked.
+- Usernames show in the white cards after the Czar has picked, revealing everyone's cards.
 
 ### Changes
 - New cards are drawn after the Czar picks.
+- Changed the ">" indicator to "(Czar)".
+- Scoreboard table is no longer full width.
+- Some cards are hoverable (played cards), while others (instructions and black cards) are not.
 
 ### Fixes
 - Fixed players can't join a game in progress.

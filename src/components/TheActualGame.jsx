@@ -50,7 +50,16 @@ class TheActualGame extends Component {
       <div className={classes.root}>
         <Grid id='played-cards' container spacing={24}>
           <Grid className='card' item xs={1}>
-            <Paper className={'black-card ' + classes.paper}><Interweave content={game.gameState.blackCard.text} /></Paper>
+            <Paper className={'black-card ' + classes.paper} style={{ position: 'relative' }}>
+              <Interweave content={game.gameState.blackCard.text} />
+              <br /><br />
+              <Typography style={{
+                color: 'rgba(255,255,255,0.6)',
+                position: 'absolute',
+                bottom: '0px',
+                right: '5px'
+              }}><strong>Pick {game.gameState.blackCard.pick}</strong></Typography>
+            </Paper>
           </Grid>
           {
             isCzar
@@ -65,7 +74,7 @@ class TheActualGame extends Component {
                 ? !game.gameState.czarReady
                   ? game.gameState.playedWhiteCards[clientIndex].cards.map((card) => {
                     return (
-                      <Grid className='card white-card' item xs={1}>
+                      <Grid className='card card-hover white-card' item xs={1}>
                         <Paper className={classes.paper} style={{ marginBottom: '10px' }}><Interweave content={card} /></Paper>
                       </Grid>
                     );
@@ -81,7 +90,7 @@ class TheActualGame extends Component {
             game.gameState.czarReady
               ? game.gameState.playedWhiteCards.map((player) => {
                 return (
-                  <Grid className='card white-card' item xs={1} onClick={
+                  <Grid className='card card-hover white-card' item xs={1} onClick={
                     isCzar
                       ? czarPick(player.username)
                       : null
@@ -89,7 +98,19 @@ class TheActualGame extends Component {
                     {
                       player.cards.map((card) => {
                         return (
-                          <Paper className={classes.paper} style={{ marginBottom: '10px' }}><Interweave content={card} /></Paper>
+                          <Paper className={classes.paper} style={{ marginBottom: '10px', position: 'relative' }}>
+                            <Interweave content={card} />
+                            {
+                              game.gameState.czarHasPicked
+                                ? <Typography style={{
+                                  color: 'rgba(0, 0, 0, 0.6)',
+                                  position: 'absolute',
+                                  bottom: '0px',
+                                  right: '5px'
+                                }}><strong>{player.username}</strong></Typography>
+                                : null
+                            }
+                          </Paper>
                         );
                       })
                     }
@@ -100,7 +121,7 @@ class TheActualGame extends Component {
           }
         </Grid>
 
-        <ExpansionPanel style={{ marginTop: '20px' }}>
+        <ExpansionPanel style={{ marginTop: '20px', maxWidth: '500px' }}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography className={classes.heading}>Scores</Typography>
           </ExpansionPanelSummary>
@@ -122,8 +143,8 @@ class TheActualGame extends Component {
                           {
                             playerIndex === game.gameState.czar
                               ? player.username === username
-                                ? <strong>> {player.username} (You)</strong>
-                                : `> ${player.username}`
+                                ? <strong>{player.username} (Czar) (You)</strong>
+                                : `${player.username} (Czar)`
                               : player.username === username
                                 ? <strong>{player.username} (You)</strong>
                                 : player.username
@@ -156,7 +177,7 @@ class TheActualGame extends Component {
                       classNames="item"
                     >
                       <Grid
-                        className='card white-card'
+                        className='card card-hover white-card'
                         item xs={1} onClick={playCard(cardIndex)}>
                         <Paper className={classes.paper}><Interweave content={card} /></Paper>
                       </Grid>

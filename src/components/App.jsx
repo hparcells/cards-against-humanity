@@ -44,6 +44,9 @@ const styles = {
   },
   flex: {
     flex: 1
+  },
+  grow: {
+    flexGrow: 1
   }
 };
 
@@ -283,9 +286,11 @@ class App extends Component {
         <div className={classes.root}>
           <AppBar position='static' color='primary'>
             <Toolbar>
-              <Typography variant='h6' color='inherit'>
+              <Typography variant='h6' color='inherit' className={classes.grow}>
                 Cards Against Humanity
               </Typography>
+
+              <Typography variant='h6' color='inherit'>{this.state.connected ? this.state.username : null}</Typography>
             </Toolbar>
           </AppBar>
 
