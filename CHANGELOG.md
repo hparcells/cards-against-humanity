@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - When someone wins.
   - When a dialog pops up.
   - Animations when playing a card and recieving a card.
+- Custom sets!
+  - You can now import a JSON file (documentation coming soon) to load custom cards that you want to play with.
+- Extended the Programmer Pack
 
 ### Changes
 - New cards are drawn after the Czar picks.

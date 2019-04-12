@@ -6,11 +6,13 @@
     "build-development": "webpack --mode development",
     "build-production": "webpack --mode production",
     "start": "webpack-dev-server --hot",
-    "publish": "npm run build-production && surge ./dist/ cards-against-humanity.surge.sh"
+    "publish": "npm run build-production && surge ./dist/ cards-against-humanity.surge.sh",
+    "docs": "docsify serve ./docs"
   },
   "dependencies": {
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
+    "docsify-cli": "^4.3.0",
     "interweave": "^10.1.3",
     "react": "^16.7.0",
     "react-beforeunload": "^1.0.4",
