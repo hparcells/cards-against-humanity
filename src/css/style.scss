@@ -11,7 +11,7 @@ body {
 .card {
   min-width: 150px;
   overflow-wrap: break-word;
-  transition: opacity 350ms linear, margin-right 350ms cubic-bezier(0.19, 1, 0.22, 1);
+  transition: transform 350ms cubic-bezier(0.19, 1, 0.22, 1), opacity 350ms linear, margin-right 350ms cubic-bezier(0.19, 1, 0.22, 1);
 }
 .item-enter {
   transform: translateX(100vw);
@@ -28,9 +28,6 @@ body {
   transform: translateY(-60vh);
   opacity: 0; 
   margin-right: -150px !important;
-}
-.card-hover {
-  transition: transform 350ms cubic-bezier(0.19, 1, 0.22, 1);
 }
 .card-hover:hover:not(.item-exit-active) {
   transform: translateY(-10px);
