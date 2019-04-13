@@ -30,7 +30,9 @@ function Transition(props) {
 
 const styles = (theme) => ({
   button: {
-    margin: theme.spacing.unit
+    marginTop: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    marginBottom: theme.spacing.unit
   },
   fab: {
     position: 'fixed',
@@ -81,7 +83,7 @@ class Game extends Component {
   }
 
   render() {
-    const { classes, username, game, disconnect, start, playCard, czarPick, kill, decks, toggleDeck } = this.props;
+    const { classes, username, game, disconnect, start, playCard, czarPick, kill, decks, toggleDeck, toggleAllDecks } = this.props;
 
     const clientIndex = game.players.indexOf(game.players.find((player) => {
       return username === player.username;
@@ -96,12 +98,14 @@ class Game extends Component {
                 {
                   game.players.length >= 4
                     ? username === game.players[0].username
-                      ? <Button variant='outlined' color='primary' className={classes.button} style={{ marginTop: '35px' }} onClick={start}>Start with {game.players.length} Players</Button>
-                      : <Button variant='outlined' color='primary' className={classes.button} style={{ marginTop: '35px' }} disabled onClick={start}>Start with {game.players.length} Players (Only the Host Can Start the Game)</Button>
-                    : <Button variant='outlined' color='primary' disabled className={classes.button} style={{ marginTop: '35px' }}>Start ({game.players.length} of 4 Players)</Button>
+                      ? <Button variant='contained' color='primary' className={classes.button} style={{ marginTop: '35px' }} onClick={start}>Start with {game.players.length} Players</Button>
+                      : <Button variant='contained' color='primary' className={classes.button} style={{ marginTop: '35px' }} disabled onClick={start}>Start with {game.players.length} Players (Only the Host Can Start the Game)</Button>
+                    : <Button variant='contained' color='primary' disabled className={classes.button} style={{ marginTop: '35px' }}>Start ({game.players.length} of 4 Players)</Button>
                 }
 
                 <Typography variant='h4' style={{ marginTop: '20px' }}>Select Decks to Use</Typography>
+                <Button variant='outlined' color='primary' className={classes.button} onClick={toggleAllDecks}>Toggle All</Button>
+
                 <Typography variant='h5'>Official</Typography>
                 <FormGroup row>
                   {
@@ -163,7 +167,7 @@ class Game extends Component {
                   {
                     /* TODO: Documentation link. */
                   }
-                  <Button variant="contained" color="primary" className={classes.button} disabled={clientIndex !== 0} onClick={this.openDialog}>Import JSON</Button>
+                  <Button variant="outlined" color="primary" className={classes.button} disabled={clientIndex !== 0} onClick={this.openDialog}>Import JSON</Button>
                   {
                     decks.filter((deck) => deck.custom).map((deck) => {
                       const codeName = deck.codeName;

@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed the ">" indicator to "(Czar)".
 - Scoreboard table is no longer full width.
 - Some cards are hoverable (played cards), while others (instructions and black cards) are not.
+- The contained buttons have been replaced with outlined buttons, and the outlined buttons have been replaced with contained buttons.
 
 ### Fixes
 - Fixed players can't join a game in progress.

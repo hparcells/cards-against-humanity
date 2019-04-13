@@ -67,6 +67,7 @@ class App extends Component {
       // Game
       username: '',
       connected: false,
+      allDecksSelected: false,
       game: {},
       // Dialogs and text.
       dialog: {
@@ -225,6 +226,22 @@ class App extends Component {
       this.setState(newState);
     }
   }
+  toggleAllDecks = () => {
+    const toggledDecks = this.state.game.decks;
+    toggledDecks.forEach((deck, index) => {
+      if(deck.codeName !== 'base-set') {
+        toggledDecks[index].selected = !this.state.allDecksSelected;
+      }
+    });
+
+    this.setState((prevState) => ({
+      allDecksSelected: !prevState.allDecksSelected,
+      game: {
+        ...prevState.game,
+        decks: toggledDecks
+      }
+    }));
+  }
   newCustomDeck = (file) => () => {
     SOCKET.emit('newCustomDeck', file);
   }
@@ -314,6 +331,7 @@ class App extends Component {
                 decks={this.state.game.decks}
                 toggleDeck={this.toggleDeck}
                 newCustomDeck={this.newCustomDeck}
+                toggleAllDecks={this.toggleAllDecks}
               />
               : <Start
                 username={this.state.username}
