@@ -102,7 +102,11 @@ class App extends Component {
     }
 
     // TODO: Update
-    SOCKET = io('http://localhost:3000/');
+    if(process.env.NODE_ENV === 'development') {
+      SOCKET = io('http://localhost:3000/');
+    }else {
+      SOCKET = io('http://cah.servegame.com:3000/');
+    }
     const CONNECT_TIMEOUT = setTimeout(() => {
       SOCKET.disconnect();
       this.setState({
@@ -132,12 +136,12 @@ class App extends Component {
       });
       playSound('dialog');
     });
-    SOCKET.on('badCustomDeck', (error) => {
+    SOCKET.on('badCustomDeck', (content) => {
       this.setState({
         dialog: {
           open: true,
           title: 'Bad JSON',
-          content: error
+          content: content
         }
       });
       playSound('dialog');
@@ -267,9 +271,12 @@ class App extends Component {
     SOCKET.emit('kill');
   }
   closeDialog = () => {
-    this.setState({
-      dialog: { open: false }
-    });
+    this.setState((prevState) =>  ({
+      dialog: {
+        ...prevState.dialog,
+        open: false
+      }
+    }));
   };
   closeEndGameDialog = () => {
     this.setState({ endGameDialog: false });

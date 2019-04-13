@@ -27,10 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixes
 - Fixed players can't join a game in progress.
+- Dialog doesn't remove it's contents on close.
+- Fixed the deck will run out and could have unintended consequences.
 
 ### Known Bugs
 - AFK players will softlock the game.
-- The deck will run out and could have unintended consequences.
 - There is an inconsistancy with players leaving making the game playable after a game ended.
 
 ## 1.1.0 [04/10/2019]
