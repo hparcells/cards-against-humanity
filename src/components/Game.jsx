@@ -21,6 +21,14 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import Input from '@material-ui/core/Input';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import FilledInput from '@material-ui/core/FilledInput';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 import TheActualGame from './TheActualGame';
 
@@ -41,6 +49,10 @@ const styles = (theme) => ({
   },
   list: {
     width: 250
+  },
+  formRoot: {
+    margin: theme.spacing.unit,
+    minWidth: 120
   }
 });
 
@@ -51,7 +63,8 @@ class Game extends Component {
     this.state = {
       adminPanelOpen: false,
       jsonDialog: false,
-      customDeck: null
+      customDeck: null,
+      timeoutTime: 60
     };
   }
 
@@ -81,6 +94,9 @@ class Game extends Component {
       this.closeDialog();
     }
   }
+  handleTimeoutTimeChange = (event) => {
+    this.setState({ timeoutTime: event.target.value });
+  }
 
   render() {
     const { classes, username, game, disconnect, start, playCard, czarPick, kill, decks, toggleDeck, toggleAllDecks } = this.props;
@@ -98,9 +114,29 @@ class Game extends Component {
                 {
                   game.players.length >= 4
                     ? username === game.players[0].username
-                      ? <Button variant='contained' color='primary' className={classes.button} style={{ marginTop: '35px' }} onClick={start}>Start with {game.players.length} Players</Button>
+                      ? <Button variant='contained' color='primary' className={classes.button} style={{ marginTop: '35px' }} onClick={start(this.state.timeoutTime)}>Start with {game.players.length} Players</Button>
                       : <Button variant='contained' color='primary' className={classes.button} style={{ marginTop: '35px' }} disabled onClick={start}>Start with {game.players.length} Players (Only the Host Can Start the Game)</Button>
                     : <Button variant='contained' color='primary' disabled className={classes.button} style={{ marginTop: '35px' }}>Start ({game.players.length} of 4 Players)</Button>
+                }
+
+                {
+                  username === game.players[0].username
+                    ? <form className={classes.formRoot} autoComplete="off">
+                      <FormControl className={classes.formControl}>
+                        <InputLabel htmlFor="age-helper">Timeout Time</InputLabel>
+                        <Select
+                          value={this.state.timeoutTime}
+                          onChange={this.handleTimeoutTimeChange}
+                          input={<Input name="timeoutTime" id="timeout-time" />}
+                        >
+                          <MenuItem value={30}>30 Seconds</MenuItem>
+                          <MenuItem value={60}>60 Seconds</MenuItem>
+                          <MenuItem value={120}>120 Seconds</MenuItem>
+                        </Select>
+                        <FormHelperText>How long should each player's turn take before a card gets automatically played.</FormHelperText>
+                      </FormControl>
+                    </form>
+                    : null
                 }
 
                 <Typography variant='h4' style={{ marginTop: '20px' }}>Select Decks to Use</Typography>
@@ -109,7 +145,7 @@ class Game extends Component {
                 <Typography variant='h5'>Official</Typography>
                 <FormGroup row>
                   {
-                    decks.filter((deck) => deck.official).map((deck) => {
+                    decks.filter((deck) => deck.official).map((deck, index) => {
                       const codeName = deck.codeName;
                       const deckIndex = decks.findIndex((deck) => {
                         return deck.codeName === codeName;
@@ -127,6 +163,7 @@ class Game extends Component {
                             />
                           }
                           label={deck.name}
+                          key={index}
                         />
                       );
                     })
@@ -138,7 +175,7 @@ class Game extends Component {
                 </Typography>
                 <FormGroup row>
                   {
-                    decks.filter((deck) => !deck.official && !deck.custom).map((deck) => {
+                    decks.filter((deck) => !deck.official && !deck.custom).map((deck, index) => {
                       const codeName = deck.codeName;
                       const deckIndex = decks.findIndex((deck) => {
                         return deck.codeName === codeName;
@@ -156,6 +193,7 @@ class Game extends Component {
                             />
                           }
                           label={deck.name}
+                          key={index}
                         />
                       );
                     })
@@ -169,7 +207,7 @@ class Game extends Component {
                   }
                   <Button variant="outlined" color="primary" className={classes.button} disabled={clientIndex !== 0} onClick={this.openDialog}>Import JSON</Button>
                   {
-                    decks.filter((deck) => deck.custom).map((deck) => {
+                    decks.filter((deck) => deck.custom).map((deck, index) => {
                       const codeName = deck.codeName;
                       const deckIndex = decks.findIndex((deck) => {
                         return deck.codeName === codeName;
@@ -187,6 +225,7 @@ class Game extends Component {
                             />
                           }
                           label={deck.name}
+                          key={index}
                         />
                       );
                     })
@@ -196,9 +235,9 @@ class Game extends Component {
                 <Typography variant='h4' style={{ marginTop: '20px' }} onClick={this.openDialog}>Connected Players</Typography>
                 <ul>
                   {
-                    game.players.map((player) => {
+                    game.players.map((player, index) => {
                       return (
-                        <li>
+                        <li key={index}>
                           <Typography>{
                             player.username === username
                               ? <strong>{player.username} (You)</strong>
@@ -264,10 +303,10 @@ class Game extends Component {
           <DialogContent>
             <DialogContentText id='alert-dialog-slide-description'>
               Submit a JSON file using the file input below.
-              <input id='jsonFileSelect' type='file' accept='.json' onChange={this.chooseFile} />
-
-              <Typography paragraph style={{ marginTop: '20px' }}>Don't know how to make a deck? Check out the documentation!</Typography>
             </DialogContentText>
+
+            <input id='jsonFileSelect' type='file' accept='.json' onChange={this.chooseFile} />
+            <Typography paragraph style={{ marginTop: '20px' }}>Don't know how to make a deck? Check out the documentation!</Typography>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.closeAndSubmitFile} color='primary'>

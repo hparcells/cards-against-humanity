@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 1.2.0 [04/14/2019]
 ### Additions
 - Sound
   - Playing a card.
@@ -30,9 +30,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed players can't join a game in progress.
 - Dialog doesn't remove it's contents on close.
 - Fixed the deck will run out and could have unintended consequences.
+- Fixed AFK players will softlock the game.
 
 ### Known Bugs
-- AFK players will softlock the game.
 - There is an inconsistancy with players leaving making the game playable after a game ended.
 
 ## 1.1.0 [04/10/2019]

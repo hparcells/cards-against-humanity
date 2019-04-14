@@ -72,9 +72,9 @@ class TheActualGame extends Component {
                 </Grid>
               : hasPlayedCard
                 ? !game.gameState.czarReady
-                  ? game.gameState.playedWhiteCards[clientIndex].cards.map((card) => {
+                  ? game.gameState.playedWhiteCards[clientIndex].cards.map((card, index) => {
                     return (
-                      <Grid className='card card-hover white-card' item xs={1}>
+                      <Grid className='card card-hover white-card' item xs={1} key={index}>
                         <Paper className={classes.paper} style={{ marginBottom: '10px' }}><Interweave content={card} /></Paper>
                       </Grid>
                     );
@@ -88,17 +88,17 @@ class TheActualGame extends Component {
           }
           {
             game.gameState.czarReady
-              ? game.gameState.playedWhiteCards.map((player) => {
+              ? game.gameState.playedWhiteCards.map((player, index) => {
                 return (
-                  <Grid className='card card-hover white-card' item xs={1} onClick={
+                  <Grid className='card card-hover white-card' item xs={1} key={index} onClick={
                     isCzar
                       ? czarPick(player.username)
                       : null
                   }>
                     {
-                      player.cards.map((card) => {
+                      player.cards.map((card, index) => {
                         return (
-                          <Paper className={classes.paper} style={{ marginBottom: '10px', position: 'relative' }}>
+                          <Paper className={classes.paper} key={index} style={{ marginBottom: '10px', position: 'relative' }}>
                             <Interweave content={card} />
                             {
                               game.gameState.czarHasPicked
@@ -174,7 +174,7 @@ class TheActualGame extends Component {
                     <CSSTransition
                       key={card}
                       timeout={500}
-                      classNames="item"
+                      classNames='item'
                     >
                       <Grid
                         className='card card-hover white-card'

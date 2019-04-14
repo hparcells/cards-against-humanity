@@ -51,6 +51,7 @@ const styles = {
 };
 
 let SOCKET;
+let playTimeout;
 
 function Transition(props) {
   return <Slide direction='up' {...props} />;
@@ -102,7 +103,6 @@ class App extends Component {
       return;
     }
 
-    // TODO: Update
     if(process.env.NODE_ENV === 'development') {
       SOCKET = io('http://localhost:3000/');
     }else {
@@ -147,6 +147,17 @@ class App extends Component {
       });
       playSound('dialog');
     });
+    SOCKET.on('roundStart', (timeoutTime) => {
+      playTimeout = setTimeout(() => {
+        const playerIndex = this.state.game.players.findIndex((player) => this.state.username === player.username);
+
+        // Play cards.
+        for(let i = 0; i < this.state.game.gameState.blackCard.pick; i++) {
+          const cardToPlay = Math.floor(Math.random() * this.state.game.players[playerIndex].hand.length);
+          this.playCard(cardToPlay)();
+        }
+      }, timeoutTime * 1000);
+    });
     // New game data.
     SOCKET.on('updatedGame', (game) => {
       this.setState({ game: game });
@@ -166,14 +177,12 @@ class App extends Component {
     });
     // When someone wins.
     SOCKET.on('winner', (winnerUsername, players) => {
-      const clientIndex = players.indexOf(players.find((player) => {
-        return this.state.username === player.username;
-      }));
+      const playerIndex = players.findIndex((player) => this.state.username === player.usename);
       
       this.setState({
         endGameDialog: true,
         winner: winnerUsername,
-        clientScore: players[clientIndex].score
+        clientScore: players[playerIndex].score
       });
       SOCKET.disconnect();
       playSound('winner');
@@ -245,10 +254,10 @@ class App extends Component {
   newCustomDeck = (file) => () => {
     SOCKET.emit('newCustomDeck', file);
   }
-  start = () => {
-    SOCKET.emit('start');
+  start = (timeoutTime) => () => {
+    SOCKET.emit('start', timeoutTime);
   }
-  playCard = (card) => () => {
+  playCard = (cardIndex) => () => {
     const isCzar = this.state.game.players.indexOf(this.state.game.players.find((player) => {
       return this.state.username === player.username;
     })) === this.state.game.gameState.czar;
@@ -263,12 +272,12 @@ class App extends Component {
 
     // If the player can play cards.
     if(!isCzar && !hasPlayedCards) {
-      const clientIndex = this.state.game.players.indexOf(this.state.game.players.find((player) => {
-        return this.state.username === player.username;
-      }));
+      const playerIndex = this.state.game.players.findIndex((player) => this.state.username === player.username);
 
-      SOCKET.emit('playedCard', this.state.username, this.state.game.players[clientIndex].hand[card]);
+      SOCKET.emit('playedCard', this.state.username, this.state.game.players[playerIndex].hand[cardIndex]);
       playSound('play');
+
+      clearTimeout(playTimeout);
     }
   }
   czarPick = (player) => () => {
