@@ -148,15 +148,22 @@ class App extends Component {
       playSound('dialog');
     });
     SOCKET.on('roundStart', (timeoutTime) => {
-      playTimeout = setTimeout(() => {
-        const playerIndex = this.state.game.players.findIndex((player) => this.state.username === player.username);
-
-        // Play cards.
-        for(let i = 0; i < this.state.game.gameState.blackCard.pick; i++) {
-          const cardToPlay = Math.floor(Math.random() * this.state.game.players[playerIndex].hand.length);
-          this.playCard(cardToPlay)();
-        }
-      }, timeoutTime * 1000);
+      const playerIndex = this.state.game.players.findIndex((player) => this.state.username === player.username);
+      
+      if(playerIndex === 0) {
+        SOCKET.emit('roundStart', Date.now());
+      }
+      if(playerIndex !== this.state.game.gameState.czar) {
+        playTimeout = setTimeout(() => {
+          const playerIndex = this.state.game.players.findIndex((player) => this.state.username === player.username);
+  
+          // Play cards.
+          for(let i = 0; i < this.state.game.gameState.blackCard.pick; i++) {
+            const cardToPlay = Math.floor(Math.random() * this.state.game.players[playerIndex].hand.length);
+            this.playCard(cardToPlay)();
+          }
+        }, (timeoutTime * 1000) + 1000);
+      }
     });
     // New game data.
     SOCKET.on('updatedGame', (game) => {
@@ -276,7 +283,7 @@ class App extends Component {
 
       SOCKET.emit('playedCard', this.state.username, this.state.game.players[playerIndex].hand[cardIndex]);
       playSound('play');
-
+      
       clearTimeout(playTimeout);
     }
   }

@@ -83,7 +83,11 @@ class TheActualGame extends Component {
                     <Paper className={classes.paper} style={{ marginBottom: '10px' }}>Wait for the Czar to pick the best white card(s).</Paper>
                   </Grid>
                 : <Grid className='card white-card' item xs={1}>
-                  <Paper className={classes.paper}>Click on a card to play it.</Paper>
+                  <Paper className={classes.paper}>
+                    Click on a card to play it.
+                    <br /><br />
+                    {game.gameState.turnTimeLeft}
+                  </Paper>
                 </Grid>
           }
           {
