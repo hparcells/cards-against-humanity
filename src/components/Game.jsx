@@ -202,9 +202,6 @@ class Game extends Component {
                 <Typography variant='h5'>Custom</Typography>
                 <Typography paragraph>Import your own JSON files to play with cards YOU want!</Typography>
                 <FormGroup row>
-                  {
-                    /* TODO: Documentation link. */
-                  }
                   <Button variant="outlined" color="primary" className={classes.button} disabled={clientIndex !== 0} onClick={this.openDialog}>Import JSON</Button>
                   {
                     decks.filter((deck) => deck.custom).map((deck, index) => {
@@ -306,7 +303,7 @@ class Game extends Component {
             </DialogContentText>
 
             <input id='jsonFileSelect' type='file' accept='.json' onChange={this.chooseFile} />
-            <Typography paragraph style={{ marginTop: '20px' }}>Don't know how to make a deck? Check out the documentation!</Typography>
+            <Typography paragraph style={{ marginTop: '20px' }}>Don't know how to make a deck? Check out the <a href='https://hparcells.github.io/cards-against-humanity/#/' target='_blank' rel='noreferrer noopener'>documentation</a>!</Typography>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.closeAndSubmitFile} color='primary'>

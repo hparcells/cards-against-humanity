@@ -24,6 +24,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Start from './Start';
 import Game from './Game';
 import playSound from '../js/play-sound';
+import Interweave from 'interweave';
 
 const theme = createMuiTheme({
   palette: {
@@ -81,7 +82,8 @@ class App extends Component {
       snackbarContent: '',
       // Post game.
       winner: '',
-      clientScore: 0
+      clientScore: 0,
+      log: []
     };
   }
 
@@ -162,7 +164,7 @@ class App extends Component {
             const cardToPlay = Math.floor(Math.random() * this.state.game.players[playerIndex].hand.length);
             this.playCard(cardToPlay)();
           }
-        }, (timeoutTime * 1000) + 1000);
+        }, timeoutTime * 1000 + 1000);
       }
     });
     // New game data.
@@ -183,13 +185,14 @@ class App extends Component {
       playSound('round-winner');
     });
     // When someone wins.
-    SOCKET.on('winner', (winnerUsername, players) => {
-      const playerIndex = players.findIndex((player) => this.state.username === player.usename);
+    SOCKET.on('winner', (winnerUsername, players, log) => {
+      const playerIndex = players.findIndex((player) => this.state.username === player.username);
       
       this.setState({
         endGameDialog: true,
         winner: winnerUsername,
-        clientScore: players[playerIndex].score
+        clientScore: players[playerIndex].score,
+        log: log
       });
       SOCKET.disconnect();
       playSound('winner');
@@ -409,6 +412,10 @@ class App extends Component {
               <Divider />
               <ListItem>
                 <ListItemText primary='Your Score' secondary={this.state.clientScore} />
+              </ListItem>
+              <Divider />
+              <ListItem>
+                <ListItemText primary='Game Log' secondary={<Interweave content={this.state.log.join('<br />')}/>} />
               </ListItem>
             </List>
           </Dialog>

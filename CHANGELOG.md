@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Additions
 - Timer showing how much time is left for the turn.
+- Logging System
 
 ### Known Bugs
 - There is an inconsistency with players leaving making the game playable after a game ended.
