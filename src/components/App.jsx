@@ -20,11 +20,12 @@ import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
+import playSound from '../js/play-sound';
+import Interweave from 'interweave';
+import clipboard from 'clipboard-polyfill';
 
 import Start from './Start';
 import Game from './Game';
-import playSound from '../js/play-sound';
-import Interweave from 'interweave';
 
 const theme = createMuiTheme({
   palette: {
@@ -406,6 +407,21 @@ class App extends Component {
             </AppBar>
             <Typography variant='h4' style={{ textAlign: 'center', marginTop: '10px' }}>Game Summrary</Typography>
             <List>
+              <Button variant='outlined' onClick={() => {
+                const blob = new Blob([ this.state.log.join('\n') ], { type: 'text/plain', endings: 'native' });
+
+                const a = document.createElement('a');
+                a.download = 'log.txt';
+                a.href = URL.createObjectURL(blob);
+                a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(function() { URL.revokeObjectURL(a.href); }, 1500);
+              }} style={{ marginLeft: '15px' }}>
+                Download Log (.txt)
+              </Button>
               <ListItem>
                 <ListItemText primary='Winner' secondary={this.state.winner} />
               </ListItem>
