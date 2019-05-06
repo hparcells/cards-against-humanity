@@ -1,9 +1,11 @@
 # cards-against-humanity
-> Cards Against Humanity built in React.
+> Another Cards Against Humanity clone built in React.
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/ages-18.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/kinda-sfw.svg)](https://forthebadge.com)
+
+[![Gitter](https://badges.gitter.im/cards-against-humanity-react/community.svg)](https://gitter.im/cards-against-humanity-react/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 ## Play
 You can play the game at http://cards-against-humanity.surge.sh.
@@ -25,6 +27,7 @@ Development time took around two and a half weeks, way shorter than I though it 
 
 ## Future Roadmap
 - [ ] Desktop App via **Electon**
+- [ ] Fix, when player leaves they are still in game, problem
 
 ## Credits
 - Hunter Parcells (Me): Almost the whole game.
