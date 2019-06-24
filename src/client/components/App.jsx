@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader/root';
-import io from 'socket.io-client';
+import socket from 'client/socket';
 import { withStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
 import AppBar from '@material-ui/core/AppBar';
@@ -22,7 +22,6 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import playSound from '../js/play-sound';
 import Interweave from 'interweave';
-import clipboard from 'clipboard-polyfill';
 
 import Start from './Start';
 import Game from './Game';
@@ -52,8 +51,9 @@ const styles = {
   }
 };
 
-let SOCKET;
 let playTimeout;
+
+let connectTimeout;
 
 function Transition(props) {
   return <Slide direction='up' {...props} />;
@@ -91,6 +91,10 @@ class App extends Component {
   handleUsernameChange = (event) => {
     this.setState({ username: event.target.value });
   }
+
+  componentDidUpdate() {
+    
+  }
   connect = () => {
     const { username } = this.state;
 
@@ -106,13 +110,8 @@ class App extends Component {
       return;
     }
 
-    if(process.env.NODE_ENV === 'development') {
-      SOCKET = io('http://localhost:3000/');
-    }else {
-      SOCKET = io('http://cah.servegame.com:3000/');
-    }
-    const CONNECT_TIMEOUT = setTimeout(() => {
-      SOCKET.disconnect();
+    connectTimeout = setTimeout(() => {
+      socket.disconnect();
       this.setState({
         dialog: {
           open: true,
@@ -125,12 +124,12 @@ class App extends Component {
     }, 1500);
 
     // When the client connects.
-    SOCKET.on('connect', async() => {
-      clearTimeout(CONNECT_TIMEOUT);
-      SOCKET.emit('newPlayer', this.state.username);
+    socket.on('connect', async() => {
+      clearTimeout(connectTimeout);
+      socket.emit('newPlayer', this.state.username);
     });
     // If the username already exists in the server.
-    SOCKET.on('usernameExists', () => {
+    socket.on('usernameExists', () => {
       this.setState({
         dialog: {
           open: true,
@@ -140,7 +139,7 @@ class App extends Component {
       });
       playSound('dialog');
     });
-    SOCKET.on('badCustomDeck', (content) => {
+    socket.on('badCustomDeck', (content) => {
       this.setState({
         dialog: {
           open: true,
@@ -150,11 +149,11 @@ class App extends Component {
       });
       playSound('dialog');
     });
-    SOCKET.on('roundStart', (timeoutTime) => {
+    socket.on('roundStart', (timeoutTime) => {
       const playerIndex = this.state.game.players.findIndex((player) => this.state.username === player.username);
       
       if(playerIndex === 0) {
-        SOCKET.emit('roundStart', Date.now());
+        socket.emit('roundStart', Date.now());
       }
       if(playerIndex !== this.state.game.gameState.czar) {
         playTimeout = setTimeout(() => {
@@ -163,13 +162,14 @@ class App extends Component {
           // Play cards.
           for(let i = 0; i < this.state.game.gameState.blackCard.pick; i++) {
             const cardToPlay = Math.floor(Math.random() * this.state.game.players[playerIndex].hand.length);
+
             this.playCard(cardToPlay)();
           }
         }, timeoutTime * 1000 + 1000);
       }
     });
     // New game data.
-    SOCKET.on('updatedGame', (game) => {
+    socket.on('updatedGame', (game) => {
       this.setState({ game: game });
 
       // Set state connected if not set already.
@@ -178,7 +178,7 @@ class App extends Component {
       }
     });
     // When the Czar picks the winner for the round.
-    SOCKET.on('roundWinner', (username) => {
+    socket.on('roundWinner', (username) => {
       this.setState({
         snackbarOpen: true,
         snackbarContent: `${username} won the round. Next round in three seconds.`
@@ -186,7 +186,7 @@ class App extends Component {
       playSound('round-winner');
     });
     // When someone wins.
-    SOCKET.on('winner', (winnerUsername, players, log) => {
+    socket.on('winner', (winnerUsername, players, log) => {
       const playerIndex = players.findIndex((player) => this.state.username === player.username);
       
       this.setState({
@@ -195,11 +195,11 @@ class App extends Component {
         clientScore: players[playerIndex].score,
         log: log
       });
-      SOCKET.disconnect();
+      socket.disconnect();
       playSound('winner');
     });
     // If there isn't enough people to continue the game.
-    SOCKET.on('gameEndNotEnoughPlayers', () => {
+    socket.on('gameEndNotEnoughPlayers', () => {
       this.setState({
         dialog: {
           open: true,
@@ -207,17 +207,17 @@ class App extends Component {
           content: 'There were not enough players to continue the game, therefore the game was closed.'
         }
       });
-      SOCKET.disconnect();
+      socket.disconnect();
 
       playSound('dialog');
     });
     // If the server stops working.
-    SOCKET.on('disconnect', () => {
+    socket.on('disconnect', () => {
       this.setState({
         connected: false,
         game: {}
       });
-      SOCKET.disconnect();
+      socket.disconnect();
       
       if(!this.state.usernameExistsDialog && !this.state.notEnoughPlayersDialog && !this.state.username === '') {
         this.setState({
@@ -240,14 +240,16 @@ class App extends Component {
       const deckIndex = deckArray.indexOf(deckArray.find((deck) => {
         return deck.codeName === deckCodeName;
       }));
+
       deckArray[deckIndex].selected = !deckArray[deckIndex].selected;
       
-      SOCKET.emit('updatedDecks', newState.decks);
+      socket.emit('updatedDecks', newState.decks);
       this.setState(newState);
     }
   }
   toggleAllDecks = () => {
     const toggledDecks = this.state.game.decks;
+
     toggledDecks.forEach((deck, index) => {
       if(deck.codeName !== 'base-set') {
         toggledDecks[index].selected = !this.state.allDecksSelected;
@@ -263,10 +265,10 @@ class App extends Component {
     }));
   }
   newCustomDeck = (file) => () => {
-    SOCKET.emit('newCustomDeck', file);
+    socket.emit('newCustomDeck', file);
   }
   start = (timeoutTime) => () => {
-    SOCKET.emit('start', timeoutTime);
+    socket.emit('start', timeoutTime);
   }
   playCard = (cardIndex) => () => {
     const isCzar = this.state.game.players.indexOf(this.state.game.players.find((player) => {
@@ -277,6 +279,7 @@ class App extends Component {
     });
     
     let hasPlayedCards;
+
     if(clientPlayedCards) {
       hasPlayedCards = clientPlayedCards.cards.length === this.state.game.gameState.blackCard.pick;
     }
@@ -285,7 +288,7 @@ class App extends Component {
     if(!isCzar && !hasPlayedCards) {
       const playerIndex = this.state.game.players.findIndex((player) => this.state.username === player.username);
 
-      SOCKET.emit('playedCard', this.state.username, this.state.game.players[playerIndex].hand[cardIndex]);
+      socket.emit('playedCard', this.state.username, this.state.game.players[playerIndex].hand[cardIndex]);
       playSound('play');
       
       clearTimeout(playTimeout);
@@ -293,19 +296,19 @@ class App extends Component {
   }
   czarPick = (player) => () => {
     if(!this.state.game.gameState.czarHasPicked) {
-      SOCKET.emit('czarPicked', player);
+      socket.emit('czarPicked', player);
     }
   }
   disconnect = () => {
-    SOCKET.emit('playerDisconnect', this.state.username);
-    SOCKET.close();
+    socket.emit('playerDisconnect', this.state.username);
+    socket.close();
     this.setState({
       connected: false,
       game: {}
     });
   }
   kill = () => {
-    SOCKET.emit('kill');
+    socket.emit('kill');
   }
   closeDialog = () => {
     this.setState((prevState) =>  ({
@@ -411,6 +414,7 @@ class App extends Component {
                 const blob = new Blob([ this.state.log.join('\n') ], { type: 'text/plain', endings: 'native' });
 
                 const a = document.createElement('a');
+
                 a.download = 'log.txt';
                 a.href = URL.createObjectURL(blob);
                 a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
@@ -418,7 +422,9 @@ class App extends Component {
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
-                setTimeout(function() { URL.revokeObjectURL(a.href); }, 1500);
+                setTimeout(() => {
+                  URL.revokeObjectURL(a.href);
+                }, 1500);
               }} style={{ marginLeft: '15px' }}>
                 Download Log (.txt)
               </Button>

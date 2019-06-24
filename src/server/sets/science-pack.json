@@ -1,0 +1,60 @@
+{
+  "name": "Science Pack",
+  "codeName": "science-pack",
+  "official": true,
+  "blackCards": [
+    {
+      "pick": 2,
+      "text": "In line with our predictions, we find a robust correlation between _ and _ (p&gt;.05)."
+    },
+    {
+      "pick": 1,
+      "text": "In what's being hailed as a major breakthrough, scientists have synthesized _ in the lab."
+    },
+    {
+      "pick": 1,
+      "text": "A study published in Nature this week found that _ is good for you in small doses."
+    },
+    {
+      "pick": 2,
+      "text": "In an attempt to recreate conditions just after the Big Bang, physicists at the LHC are observing collisions between _ and _."
+    },
+    {
+      "pick": 1,
+      "text": "What really killed the dinosaurs?"
+    },
+    {
+      "pick": 1,
+      "text": "Hey there, Young Scientists! Put on your labcoats and strap on your safety goggles, because today we're learning about _!"
+    },
+    {
+      "pick": 2,
+      "text": "Today on MythBusters, we found out how long _ can withstand _."
+    }
+  ],
+  "whiteCards": [
+    "A supermassive black hole.",
+    "Reconciling quantum theory with general relativity.",
+    "Electroejaculating a capuchin monkey.",
+    "Insufficient serotonin.",
+    "Evolving a labyrinthine vagina.",
+    "Getting really worried about global warming for a few seconds.",
+    "Infinity.",
+    "Oxytocin release via manual stimulation of the nipples.",
+    "Uranus.",
+    "Being knowledgeable in a narrow domain that nobody understands or cares about.",
+    "Achieving reproductive success.",
+    "Slowly evaporating.",
+    "The quiet majesty of the sea turtle.",
+    "A 0.7 waist-to-hip ratio.",
+    "Fun and interesting facts about rocks.",
+    "Photosynthesis.",
+    "Developing secondary sex characteristics.",
+    "Failing the Turing test.",
+    "Explosive decompression.",
+    "Driving into a tornado to learn about tornadoes.",
+    "David Attenborough watching us mate.",
+    "3.7 billion years of evolution.",
+    "The Sun engulfing the Earth."
+  ]
+}

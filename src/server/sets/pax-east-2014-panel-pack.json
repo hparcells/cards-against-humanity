@@ -1,0 +1,25 @@
+{
+  "name": "PAX East 2014 Panel Pack",
+  "codeName": "pax-east-2014-panel-pack",
+  "official": true,
+  "blackCards": [
+    {
+      "text": "Let me tell you about my new startup. It's basically _, but for _.",
+      "pick": 2
+    },
+    {
+      "text": "_ was totally worth the trauma.",
+      "pick": 1
+    }
+  ],
+  "whiteCards": [
+    "Exciting content!",
+    "Rubbing chocolate pudding all over Bill Cosby's nipples.",
+    "What The Rock was really cooking.",
+    "Stepping on a god damn friggin' LEGO.",
+    "All this liquid in my mouth.",
+    "Giving a dolphin a handjob for science.",
+    "Hodor.",
+    "A floor that is literally made of lava."
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "name": "Reject Pack",
+  "codeName": "reject-pack",
+  "official": true,
+  "blackCards": [
+    {
+      "pick": 1,
+      "text": "You can't wait forever. It's time to talk to your doctor about _."
+    },
+    {
+      "pick": 1,
+      "text": "The Westboro Baptist Church is now picketing soldiers' funerals with signs that read 'GOD HATES _.'"
+    },
+    {
+      "pick": 1,
+      "text": "What are two cards in your hand that you want to get rid of?"
+    },
+    {
+      "pick": 1,
+      "text": "The elders of the Ibo tribe of Nigeria recommend _ as a cure for impotence."
+    },
+    {
+      "pick": 1,
+      "text": "My name is Inigo Montoya. You killed my father. Prepare for _."
+    },
+    {
+      "pick": 1,
+      "text": "From WBEZ Chicago, it's This American Life. Today on our program, _. Stay with us."
+    },
+    {
+      "pick": 1,
+      "text": "What do you see?"
+    },
+    {
+      "pick": 1,
+      "text": "Sir, we found you passed out naked on the side of the road. What's the last thing you remember?"
+    }
+  ],
+  "whiteCards": [
+    "My dick in your mouth.",
+    "Corn.",
+    "Carribbean Jesus.",
+    "Super yoga.",
+    "Ladles.",
+    "Ejaculating a pound of tinsel.",
+    "A heart that is two sizes too small and that therefore cannot pump an adequate amount of blood.",
+    "The John D. and Catherine T. MacArthur Foundation.",
+    "Dividing by zero.",
+    "Playing an ocarina to summon Ultra-Congress from the sea.",
+    "Asshole pomegranates that are hard to eat.",
+    "Becoming so rich that you shed your body and turn to vapor.",
+    "Faking a jellyfish sting so someone will pee on you.",
+    "A sexy naked interactive theater thing.",
+    "A giant squid in a wedding gown.",
+    "Crawling into a vagina."
+  ]
+}

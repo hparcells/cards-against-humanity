@@ -14,7 +14,6 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Interweave from 'interweave';
-import ReactHtmlParser from 'react-html-parser';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 const styles = (theme) => ({
