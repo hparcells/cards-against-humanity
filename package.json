@@ -8,15 +8,15 @@
     "dev": "fullstack-system dev",
     "build": "fullstack-system build",
     "clean": "fullstack-system clean",
-    "production": "fullstack-system production"
+    "production": "fullstack-system production -p $PORT"
   },
   "dependencies": {
     "@material-ui/core": "^4.1.2",
     "@material-ui/icons": "^4.2.1",
+    "entities": "^1.1.2",
     "fullstack-system": "^2.2.2",
     "interweave": "^11.1.0",
     "react": "^16.8.6",
-    "react-beforeunload": "^2.1.0",
     "react-dom": "^16.8.6",
     "react-hot-loader": "^4.11.1",
     "react-transition-group": "^4.1.1"

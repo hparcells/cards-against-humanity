@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 import { io } from 'fullstack-system';
-
+import fs from 'fs';
+import entities from 'entities';
+    
 let game = {
   players: [],
   timeoutTime: 0,
@@ -37,7 +39,7 @@ function addDecks(addBlackCards, addWhiteCards) {
   // Get the default decks.
 
   defaultDecksToUse.forEach((deckCodeName) => {
-    const deckContents = fs.readFileSync(`./sets/${deckCodeName}.json`);
+    const deckContents = fs.readFileSync(`src/server/sets/${deckCodeName}.json`);
     
     // Add the black cards.
     if(addBlackCards) {
@@ -157,8 +159,8 @@ io.on('connection', (socket) => {
 
     // Get the decks.
     if(game.players.length === 1) {
-      fs.readdirSync('./sets/').forEach((file) => {
-        const contents = fs.readFileSync(`./sets/${file}`);
+      fs.readdirSync('src/server/sets/').forEach((file) => {
+        const contents = fs.readFileSync(`src/server/sets/${file}`);
         const jsonContent = JSON.parse(contents);
 
         game.decks.push({

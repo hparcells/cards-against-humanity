@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader/root';
-import socket from 'client/socket';
+import { connect } from 'fullstack-system';
 import { withStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
 import AppBar from '@material-ui/core/AppBar';
@@ -25,6 +25,8 @@ import Interweave from 'interweave';
 
 import Start from './Start';
 import Game from './Game';
+
+export let socket;
 
 const theme = createMuiTheme({
   palette: {
@@ -95,7 +97,7 @@ class App extends Component {
   componentDidUpdate() {
     
   }
-  connect = () => {
+  connectToGame = () => {
     const { username } = this.state;
 
     if(username === '' || username.length > 16) {
@@ -109,6 +111,8 @@ class App extends Component {
       
       return;
     }
+
+    socket = connect();
 
     connectTimeout = setTimeout(() => {
       socket.disconnect();
@@ -359,7 +363,7 @@ class App extends Component {
               : <Start
                 username={this.state.username}
                 handleUsernameChange={this.handleUsernameChange}
-                connect={this.connect}
+                connect={this.connectToGame}
               />
           }
 
