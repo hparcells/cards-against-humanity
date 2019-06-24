@@ -1,0 +1,42 @@
+{
+  "name": "[B] Red Rising Pack",
+  "codeName": "red-rising-pack",
+  "official": false,
+  "blackCards": [
+    {
+      "text": "Pierce Brown writes a new book, where the new character is known for _.",
+      "pick": 1
+    },
+    {
+      "text": "What did Sevro REALLY do in the bushes?",
+      "pick": 1
+    },
+    {
+      "text": "New footage released shows that Eo had _.",
+      "pick": 1
+    },
+    {
+      "text": "<em>Audentes fortuna juvat</em> really means _."
+    }
+  ],
+  "whiteCards": [
+    "A slingBlade",
+    "A razor",
+    "A pulseFist",
+    "gravBoots",
+    "The Institute",
+    "The Academy",
+    "Darrow au Andromedus",
+    "Eo",
+    "Sevro au Barca",
+    "Victra au Julii",
+    "Roque au Fabii",
+    "Ragnar",
+    "Nero au Augustus",
+    "The Howlers",
+    "Mars",
+    "Wanking off in the bushes.",
+    "Fucking a pink.",
+    "The golds."
+  ]
+}

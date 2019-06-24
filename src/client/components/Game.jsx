@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader/root';
 import { withStyles } from '@material-ui/core/styles';
-import Beforeunload from 'react-beforeunload';
+import { Beforeunload } from 'react-beforeunload';
 import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
@@ -22,8 +22,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import Input from '@material-ui/core/Input';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import FilledInput from '@material-ui/core/FilledInput';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -31,6 +29,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 import TheActualGame from './TheActualGame';
+import { socket } from './App';
 
 function Transition(props) {
   return <Slide direction='up' {...props} />;
@@ -97,9 +96,12 @@ class Game extends Component {
   handleTimeoutTimeChange = (event) => {
     this.setState({ timeoutTime: event.target.value });
   }
+  exit = () => {
+    socket.emit('playerDisconnect', this.props.username);
+  }
 
   render() {
-    const { classes, username, game, disconnect, start, playCard, czarPick, kill, decks, toggleDeck, toggleAllDecks } = this.props;
+    const { classes, username, game, start, playCard, czarPick, kill, decks, toggleDeck, toggleAllDecks } = this.props;
 
     const clientIndex = game.players.indexOf(game.players.find((player) => {
       return username === player.username;
@@ -107,7 +109,7 @@ class Game extends Component {
 
     return (
       <div id='game-area'>
-        <Beforeunload onBeforeunload={disconnect} />
+        <Beforeunload onBeforeunload={this.exit} />
         {
           !game.started
             ? <>

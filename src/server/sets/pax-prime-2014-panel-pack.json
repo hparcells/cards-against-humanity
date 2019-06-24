@@ -1,0 +1,35 @@
+{
+  "name": "PAX East 2014 Panel Pack",
+  "codeName": "pax-prime-2014-panel-pack",
+  "official": true,
+  "blackCards": [
+    {
+      "pick": 2,
+      "text": "Buzzfeed presents: 10 pictures of _ that look like _."
+    },
+    {
+      "pick": 1,
+      "text": "During my first game of D&amp;D, I accidentally summoned _."
+    },
+    {
+      "pick": 1,
+      "text": "Bob Ross's little-known first show was called &quot;The Joy of _.&quot;"
+    },
+    {
+      "pick": 1,
+      "text": "Like _, State Farm is there."
+    },
+    {
+      "pick": 1,
+      "text": "The Discovery Channel presents: _ week."
+    }
+  ],
+  "whiteCards": [
+    "A neck beard that is 10% cheese.",
+    "Pelvic sorcery.",
+    "Pooping as quietly as possible.",
+    "The beautiful sport of Turkish oil wrestling.",
+    "No survivors.",
+    "Go Fuck Yourself."
+  ]
+}

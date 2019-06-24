@@ -1,0 +1,45 @@
+{
+  "name": "[B] Programmer Pack",
+  "codeName": "programmer-pack",
+  "official": false,
+  "blackCards": [
+    {
+      "text": "What caused the intern to get fired?",
+      "pick": 1
+    },
+    {
+      "text": "What makes programming 100x worse?",
+      "pick": 1
+    },
+    {
+      "text": "What's a programmer's best friend?",
+      "pick": 1
+    },
+    {
+      "text": "Programmer: a person who turns _ into _.",
+      "pick": 2
+    }
+  ],
+  "whiteCards": [
+    "Works on my machine.",
+    "jQuery",
+    "JavaScript",
+    "Texas Instruments - TI-84+ CE Graphing Calculator",
+    "Rubber ducks.",
+    "Nerd shit.",
+    "Logging every other line.",
+    "StackOverflow",
+    "Google Chrome",
+    "Coffee",
+    "Code",
+    "SyntaxError",
+    ";",
+    "GitHub",
+    "MacOS on an HP",
+    "Debugging",
+    "Dark Theme",
+    "Light Theme",
+    "Arguing that arrays start at one.",
+    "Soon&trade;"
+  ]
+}
