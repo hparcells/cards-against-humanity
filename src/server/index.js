@@ -455,10 +455,10 @@ io.on('connection', (socket) => {
   });
 });
 
-app.get('/currentGame', (req, res) => {
+app.get('/api/currentGame', (req, res) => {
   res.send(game);
 });
-app.get('/set/:set', (req, res) => {
+app.get('/api/set/:set', (req, res) => {
   const set = req.params.set;
 
   if(fs.existsSync(`src/server/sets/${set}.json`)) {
@@ -469,10 +469,10 @@ app.get('/set/:set', (req, res) => {
   }
   res.send(`Set '${req.params.set}' does not exist.`);
 });
-app.get('/sets', (req, res) => {
+app.get('/api/sets', (req, res) => {
   res.send(fs.readdirSync('src/server/sets/').map((set) => set.replace('.json', '')));
 });
-app.get('/randomWhiteCard/:set?', (req, res) => {
+app.get('/api/randomWhiteCard/:set?', (req, res) => {
   const set = req.params.set || 'base-set';
 
   if(fs.existsSync(`src/server/sets/${set}.json`)) {
@@ -483,7 +483,7 @@ app.get('/randomWhiteCard/:set?', (req, res) => {
   }
   res.send(`Set '${req.params.set}' does not exist.`);
 });
-app.get('/randomBlackCard/:set?', (req, res) => {
+app.get('/api/randomBlackCard/:set?', (req, res) => {
   const set = req.params.set || 'base-set';
 
   if(fs.existsSync(`src/server/sets/${set}.json`)) {
