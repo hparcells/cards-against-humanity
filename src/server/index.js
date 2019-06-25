@@ -457,7 +457,7 @@ io.on('connection', (socket) => {
 
 app.get('/currentGame', (req, res) => {
   res.send(game);
-})
+});
 app.get('/set/:set', (req, res) => {
   const set = req.params.set;
 
@@ -470,7 +470,6 @@ app.get('/set/:set', (req, res) => {
   res.send(`Set '${req.params.set}' does not exist.`);
 });
 app.get('/sets', (req, res) => {
-
   res.send(fs.readdirSync('src/server/sets/').map((set) => set.replace('.json', '')));
 });
 app.get('/randomWhiteCard/:set?', (req, res) => {
