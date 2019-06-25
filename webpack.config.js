@@ -10,15 +10,6 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader
-          },
-          'css-loader'
-        ]
-      },
-      {
         test: /\.s(c|a)ss$/,
         use: [
           'style-loader',
@@ -32,10 +23,4 @@ module.exports = {
       }
     ]
   }
-  // plugins: [
-  //   new MiniCssExtractPlugin({
-  //     filename: '[name].css',
-  //     chunkFilename: '[id].css'
-  //   })
-  // ]
 };

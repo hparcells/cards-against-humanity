@@ -448,7 +448,7 @@ io.on('connection', (socket) => {
   });
   socket.on('kill', () => {
     function getConnectedSockets() {
-      return Object.values(IO.of('/').connected);
+      return Object.values(io.of('/').connected);
     }
     getConnectedSockets().forEach((socket) => {
       socket.disconnect(true);

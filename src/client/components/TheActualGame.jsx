@@ -47,7 +47,7 @@ class TheActualGame extends Component {
 
     return (
       <div className={classes.root}>
-        <Grid id='played-cards' container spacing={24}>
+        <Grid id='played-cards' container spacing={2}>
           <Grid className='card' item xs={1}>
             <Paper className={'black-card ' + classes.paper} style={{ position: 'relative' }}>
               <Interweave content={game.gameState.blackCard.text} />
@@ -167,7 +167,7 @@ class TheActualGame extends Component {
 
         <div id='hand'>
           <Typography variant='h4' style={{ marginBottom: '10px' }}>Your Hand:</Typography>
-          <Grid container spacing={24}>
+          <Grid container spacing={2}>
             <TransitionGroup component={React.Fragment}>
               {
                 game.players.find((player) => {
