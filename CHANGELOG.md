@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.6.0 [05/25/2019]
+### Additions
+- Added API documentation.
+### Fixes
+- Now using `pagehide` for disconnect testing. Better than `beforeunload`.
+- Fixed toggle all decks not instantly displaying on other clients.
+- Fixed Toggle All button being available to press on clients other than the host.
+
+### Known Bugs
+- The player's hand shifts up slightly on hover.
+- Mobile players are still kept in game even after leaving due to the way `pagehide` works.
+
 ## 1.5.0 [06/25/2019]
 ### Additions
 - REST API. Documentation coming soon!
@@ -11,11 +23,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixes
 - Fixed kill game not working properly.
 
+### Known Bugs
+- The player's hand shifts up slightly on hover.
+- Mobile players are still kept in game even after leaving due to the way `beforeunload` works.
+
 ## 1.4.0 [06/24/2019]
 ### Additions
 - New server and client rewrite. Stabler server.
+
 ### Known Bugs
-- There is an inconsistency with players leaving making the game playable after a game ended.
 - The player's hand shifts up slightly on hover.
 - Kill game does not work.
 

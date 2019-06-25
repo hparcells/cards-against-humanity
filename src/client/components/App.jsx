@@ -267,6 +267,7 @@ class App extends Component {
         decks: toggledDecks
       }
     }));
+    socket.emit('updatedDecks', toggledDecks);
   }
   newCustomDeck = (file) => () => {
     socket.emit('newCustomDeck', file);

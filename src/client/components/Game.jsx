@@ -96,8 +96,11 @@ class Game extends Component {
   handleTimeoutTimeChange = (event) => {
     this.setState({ timeoutTime: event.target.value });
   }
-  exit = () => {
-    socket.emit('playerDisconnect', this.props.username);
+  
+  componentDidMount() {
+    window.addEventListener('pagehide', (event) => {
+      socket.emit('playerDisconnect', this.props.username);
+    });
   }
 
   render() {
@@ -109,7 +112,6 @@ class Game extends Component {
 
     return (
       <div id='game-area'>
-        <Beforeunload onBeforeunload={this.exit} />
         {
           !game.started
             ? <>
@@ -142,7 +144,7 @@ class Game extends Component {
                 }
 
                 <Typography variant='h4' style={{ marginTop: '20px' }}>Select Decks to Use</Typography>
-                <Button variant='outlined' color='primary' className={classes.button} onClick={toggleAllDecks}>Toggle All</Button>
+                <Button variant='outlined' color='primary' className={classes.button} onClick={toggleAllDecks} disabled={username !== game.players[0].username}>Toggle All</Button>
 
                 <Typography variant='h5'>Official</Typography>
                 <FormGroup row>
