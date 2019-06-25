@@ -447,11 +447,8 @@ io.on('connection', (socket) => {
     }
   });
   socket.on('kill', () => {
-    function getConnectedSockets() {
-      return Object.values(io.of('/').connected);
-    }
-    getConnectedSockets().forEach((socket) => {
-      socket.disconnect(true);
+    Object.values(io.sockets.connected).forEach((theSocket) => {
+      theSocket.disconnect();
     });
     resetGame();
     console.log('Host killed the game.');

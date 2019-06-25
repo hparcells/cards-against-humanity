@@ -1,6 +1,6 @@
 {
   "name": "cards-against-humanity",
-  "version": "1.1.0",
+  "version": "1.5.0",
   "description": "Another Cards Against Humanity clone built in React.",
   "private": true,
   "scripts": {

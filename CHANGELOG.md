@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.5.0 [06/25/2019]
+### Additions
+- REST API. Documentation coming soon!
+
+### Fixes
+- Fixed kill game not working properly.
+
+## 1.4.0 [06/24/2019]
+### Additions
+- New server and client rewrite. Stabler server.
+### Known Bugs
+- There is an inconsistency with players leaving making the game playable after a game ended.
+- The player's hand shifts up slightly on hover.
+- Kill game does not work.
+
 ## 1.3.0 [04/16/2019]
 ### Additions
 - Timer showing how much time is left for the turn.
