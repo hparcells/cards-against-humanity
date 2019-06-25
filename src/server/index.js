@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
-import { io } from 'fullstack-system';
+import { io, app } from 'fullstack-system';
 import fs from 'fs';
 import entities from 'entities';
-    
+import { randomOf } from '@reverse/random';
+
 let game = {
   players: [],
   timeoutTime: 0,
@@ -455,4 +456,45 @@ io.on('connection', (socket) => {
     resetGame();
     console.log('Host killed the game.');
   });
+});
+
+app.get('/currentGame', (req, res) => {
+  res.send(game);
+})
+app.get('/set/:set', (req, res) => {
+  const set = req.params.set;
+
+  if(fs.existsSync(`src/server/sets/${set}.json`)) {
+    const contents = fs.readFileSync(`src/server/sets/${set}.json`);
+
+    res.send(JSON.parse(contents));
+    return;
+  }
+  res.send(`Set '${req.params.set}' does not exist.`);
+});
+app.get('/sets', (req, res) => {
+
+  res.send(fs.readdirSync('src/server/sets/').map((set) => set.replace('.json', '')));
+});
+app.get('/randomWhiteCard/:set?', (req, res) => {
+  const set = req.params.set || 'base-set';
+
+  if(fs.existsSync(`src/server/sets/${set}.json`)) {
+    const contents = fs.readFileSync(`src/server/sets/${set}.json`);
+  
+    res.send(randomOf(JSON.parse(contents).whiteCards));
+    return;
+  }
+  res.send(`Set '${req.params.set}' does not exist.`);
+});
+app.get('/randomBlackCard/:set?', (req, res) => {
+  const set = req.params.set || 'base-set';
+
+  if(fs.existsSync(`src/server/sets/${set}.json`)) {
+    const contents = fs.readFileSync(`src/server/sets/${set}.json`);
+
+    res.send(randomOf(JSON.parse(contents).blackCards).text);
+    return;
+  }
+  res.send(`Set '${req.params.set}' does not exist.`);
 });
