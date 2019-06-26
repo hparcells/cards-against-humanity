@@ -4,7 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 1.6.0 [05/25/2019]
+## 1.6.1 [06/26/2019]
+### Fixes
+- Fixed mobile players not disconnecting.
+- Made game mobile friendly.
+
+### Known Bugs
+- The player's hand shifts up slightly on hover.
+
+## 1.6.0 [06/25/2019]
 ### Additions
 - Added API documentation.
 ### Fixes
@@ -15,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Known Bugs
 - The player's hand shifts up slightly on hover.
 - Mobile players are still kept in game even after leaving due to the way `pagehide` works.
+- The game is not mobile friendly.
 
 ## 1.5.0 [06/25/2019]
 ### Additions

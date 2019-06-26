@@ -10,7 +10,8 @@ const styles = (theme) => ({
   paperRoot: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2
+    paddingBottom: theme.spacing.unit * 2,
+    marginBottom: '10px'
   },
   textField: {
     marginRight: theme.spacing.unit,
@@ -49,6 +50,12 @@ class Start extends Component {
           <Button variant='outlined' color='primary' className={classes.button} onClick={this.props.connect}>
             Connect
           </Button>
+        </Paper>
+        <Paper className={classes.paperRoot}>
+          <Typography variant='h5'>Publishing You Card Packs</Typography>
+          <Typography paragraph>Want to get your custom pack in the game? I am always welome to add pack contributions to the game. Read the documentation
+            at <a href='https://cards-against-humanity.netlify.com/#/custom-decks' target='_blank' rel='noreferrer noopener'>https://cards-against-humanity.netlify.com/#/custom-decks</a> and open a GitHub issue
+            at <a href='https://github.com/hparcells/cards-against-humanity/issues' target='_blank' rel='noreferrer noopener'>https://github.com/hparcells/cards-against-humanity/issues</a>.</Typography>
         </Paper>
       </div>
     );

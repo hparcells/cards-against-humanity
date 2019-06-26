@@ -92,5 +92,8 @@
         "jsx": true
     }
   },
-  "parser": "babel-eslint"
+  "parser": "babel-eslint",
+  "plugins": [
+    "react"
+  ]
 }

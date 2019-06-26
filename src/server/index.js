@@ -126,6 +126,25 @@ function resetGame() {
   };
   console.log('Game reset!');
 }
+function removePlayer(username) {
+  // Remove player.
+  game.players.splice(game.players.findIndex((x) => x.username === username), 1);
+  io.sockets.emit('updatedGame', game);
+  console.log(`Player ${username} disconnected.`);
+  game.log.push(`Player ${username} disconnected.`);
+
+  // If there is not enough people to join.
+  if(game.players.length < 4 && game.started) {
+    console.log('Not enough players connected. Ending game.');
+    io.sockets.emit('gameEndNotEnoughPlayers');
+    resetGame();
+    return;
+  }
+  if(game.players.length === 0) {
+    console.log('Room is empty. Resetting.');
+    resetGame();
+  }
+}
 
 io.on('connection', (socket) => {
   socket.on('newPlayer', (username) => {
@@ -176,6 +195,8 @@ io.on('connection', (socket) => {
     
     // Update the client states.
     io.sockets.emit('updatedGame', game);
+
+    socket.username = username;
   });
   socket.on('updatedDecks', (decks) => {
     game.decks = decks;
@@ -427,31 +448,17 @@ io.on('connection', (socket) => {
       console.log('New round.');
     }, 3000);
   });
-  socket.on('playerDisconnect', (username) => {
-    // Remove player.
-    game.players.splice(game.players.findIndex((x) => x.username === username), 1);
-    io.sockets.emit('updatedGame', game);
-    console.log(`Player ${username} disconnected.`);
-    game.log.push(`Player ${username} disconnected.`);
-
-    // If there is not enough people to join.
-    if(game.players.length < 4 && game.started) {
-      console.log('Not enough players connected. Ending game.');
-      io.sockets.emit('gameEndNotEnoughPlayers');
-      resetGame();
-      return;
-    }
-    if(game.players.length === 0) {
-      console.log('Room is empty. Resetting.');
-      resetGame();
-    }
-  });
   socket.on('kill', () => {
     Object.values(io.sockets.connected).forEach((theSocket) => {
       theSocket.disconnect();
     });
     resetGame();
     console.log('Host killed the game.');
+  });
+  socket.on('disconnect', () => {
+    if(socket) {
+      removePlayer(socket.username);
+    }
   });
 });
 

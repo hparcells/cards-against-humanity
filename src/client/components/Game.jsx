@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader/root';
 import { withStyles } from '@material-ui/core/styles';
-import { Beforeunload } from 'react-beforeunload';
 import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
@@ -29,7 +28,6 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 import TheActualGame from './TheActualGame';
-import { socket } from './App';
 
 function Transition(props) {
   return <Slide direction='up' {...props} />;
@@ -96,12 +94,6 @@ class Game extends Component {
   handleTimeoutTimeChange = (event) => {
     this.setState({ timeoutTime: event.target.value });
   }
-  
-  componentDidMount() {
-    window.addEventListener('pagehide', (event) => {
-      socket.emit('playerDisconnect', this.props.username);
-    });
-  }
 
   render() {
     const { classes, username, game, start, playCard, czarPick, kill, decks, toggleDeck, toggleAllDecks } = this.props;
@@ -125,13 +117,13 @@ class Game extends Component {
 
                 {
                   username === game.players[0].username
-                    ? <form className={classes.formRoot} autoComplete="off">
+                    ? <form className={classes.formRoot} autoComplete='off'>
                       <FormControl className={classes.formControl}>
-                        <InputLabel htmlFor="age-helper">Timeout Time</InputLabel>
+                        <InputLabel htmlFor='age-helper'>Timeout Time</InputLabel>
                         <Select
                           value={this.state.timeoutTime}
                           onChange={this.handleTimeoutTimeChange}
-                          input={<Input name="timeoutTime" id="timeout-time" />}
+                          input={<Input name='timeoutTime' id='timeout-time' />}
                         >
                           <MenuItem value={30}>30 Seconds</MenuItem>
                           <MenuItem value={60}>60 Seconds</MenuItem>
@@ -206,7 +198,7 @@ class Game extends Component {
                 <Typography variant='h5'>Custom</Typography>
                 <Typography paragraph>Import your own JSON files to play with cards YOU want!</Typography>
                 <FormGroup row>
-                  <Button variant="outlined" color="primary" className={classes.button} disabled={clientIndex !== 0} onClick={this.openDialog}>Import JSON</Button>
+                  <Button variant='outlined' color='primary' className={classes.button} disabled={clientIndex !== 0} onClick={this.openDialog}>Import JSON</Button>
                   {
                     decks.filter((deck) => deck.custom).map((deck, index) => {
                       const codeName = deck.codeName;

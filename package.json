@@ -1,6 +1,6 @@
 {
   "name": "cards-against-humanity",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Another Cards Against Humanity clone built in React.",
   "private": true,
   "scripts": {
@@ -19,7 +19,6 @@
     "fullstack-system": "^2.2.2",
     "interweave": "^11.1.0",
     "react": "^16.8.6",
-    "react-beforeunload": "^2.1.0",
     "react-dom": "^16.8.6",
     "react-hot-loader": "^4.11.1",
     "react-transition-group": "^4.1.1"
@@ -27,8 +26,11 @@
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.2",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.0.0",
+    "eslint": "^6.0.1",
+    "eslint-plugin-react": "^7.14.2",
     "file-loader": "^4.0.0",
     "mini-css-extract-plugin": "^0.7.0",
     "node-sass": "^4.12.0",

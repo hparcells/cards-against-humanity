@@ -305,7 +305,6 @@ class App extends Component {
     }
   }
   disconnect = () => {
-    socket.emit('playerDisconnect', this.state.username);
     socket.close();
     this.setState({
       connected: false,
